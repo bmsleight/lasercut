@@ -18,6 +18,9 @@ lasercutoutSquare(thickness=thickness, x=x, y=y,
         ],
     slits = [
             [RIGHT,x,y/2,10]
+        ],
+    cutouts = [
+            [x/6, y/6, thickness*5, thickness*2]
         ]
     );
     
