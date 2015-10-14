@@ -171,3 +171,33 @@ lasercutoutSquare(thickness=thickness, x=x, y=y,
 ![alt tag](https://raw.githubusercontent.com/bmsleight/lasercut/master/readme/example-007.png)
     
 
+## Complex Example
+Putting these all together - gives a better example - https://github.com/bmsleight/lasercut/blob/master/examples.scad
+
+![alt tag](https://raw.githubusercontent.com/bmsleight/lasercut/master/readme/example-complex.png)
+
+
+## Automatically Generate Files Ready for Laser-Cutter
+
+These models are all very nice, but we need have a nice file, normally dxf to use in a laser-cutter. So we can do this automatically.
+```
+/bin/bash ./convert-2d.sh examples.scad 
+```
+This generates three files; 
+* examples.scad.csg  
+* [2d_examples.scad](https://raw.githubusercontent.com/bmsleight/lasercut/master/2d_examples.scad)  
+* 2d_examples.scad.dxf
+
+### [2d_examples.scad](https://raw.githubusercontent.com/bmsleight/lasercut/master/2d_examples.scad) 
+This is a files show all the shapes along the y-axis.
+
+![alt tag](https://raw.githubusercontent.com/bmsleight/lasercut/master/readme/example-complex-2d-all.png)
+![alt tag](https://raw.githubusercontent.com/bmsleight/lasercut/master/readme/example-complex-2d-part.png)
+
+
+To adjust the positions of the cut-out, so that are all llisted along the y-axis the parameter flat_adjust can be used, either in the main files or tweaked in the 2d_ file. See [2d_examples_tweak.scad](https://github.com/bmsleight/lasercut/blob/master/2d_examples_tweak.scad)
+
+For example flat_adjust = [110, -350]), woudl put the next peice at 110 in x direction and -250 in y-direction. With just using flat_adjust four times, we get a more practical example. 
+
+![alt tag](https://github.com/bmsleight/lasercut/blob/master/readme/example-complex-2d-part-tweak.png)
+
