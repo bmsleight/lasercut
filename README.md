@@ -1,4 +1,4 @@
-# lasercut
+# <lasercut.scad>
 Module for openscad, allowing 3d models to be created from 2d lasercut parts
 
 ## Basic usage
@@ -107,4 +107,31 @@ for (sides =[4:6])
 
 ```
 ![alt tag](https://raw.githubusercontent.com/bmsleight/lasercut/master/readme/example-005.png)
+
+##  Finger Joints
+
+Simple finger joints, (as automatically used in the box above). Parameters are direction, startup tap, even number) so for example [UP, 1, 4] - UP direction, starting with a tab not a gap, four figners. 
+```
+include <../lasercut.scad>; 
+
+thickness = 3.1;
+x = 50;
+y = 100;
+lasercutoutSquare(thickness=thickness, x=x, y=y,
+    finger_joints=[
+            [UP, 1, 4],
+            [DOWN, 1, 4]
+        ]
+    );
+
+translate([0,y+20,thickness]) rotate([90,0,0]) 
+    lasercutoutSquare(thickness=thickness, x=x, y=y,
+        finger_joints=[
+                [UP, 1, 4],
+                [DOWN, 1, 4]
+            ]
+    );
+  
+```
+![alt tag](https://raw.githubusercontent.com/bmsleight/lasercut/master/readme/example-006.png)
 
