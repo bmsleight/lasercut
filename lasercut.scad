@@ -228,8 +228,8 @@ module captiveNutTab(angle, x, y, thickness)
 {
     translate([x,y,0]) rotate([0,0,angle]) union()
     {
-        translate([-thickness/2+thickness*2,0,0]) cube([thickness*3, thickness, thickness]); 
-        translate([-thickness/2-thickness*4,0,0]) cube([thickness*3, thickness, thickness]); 
+        translate([-thickness/2+thickness*2,-thickness,0]) cube([thickness*3, thickness*2, thickness]); 
+        translate([-thickness/2-thickness*4,-thickness,0]) cube([thickness*3, thickness*2, thickness]); 
     }
 }
 
