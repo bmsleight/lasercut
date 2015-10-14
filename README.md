@@ -86,5 +86,25 @@ translate([-20,0,0]) rotate([90,0,90])
 ```
 ![alt tag](https://raw.githubusercontent.com/bmsleight/lasercut/master/readme/example-004.png)
 
+##  Box
 
+With four, five or six side. Finger joints - the correct alignment to give a flat edge regardless of numebr of sides.
+
+```
+include <../lasercut.scad>; 
+
+thickness = 3.1;
+x = 50;
+y = 50;
+z = 75; 
+
+
+for (sides =[4:6])
+{
+    color("Gold",0.75) translate([100*(sides-4),0,0]) 
+        lasercutoutBox(thickness = thickness, x=x, y=y, z=z, sides=sides);
+}
+
+```
+![alt tag](https://raw.githubusercontent.com/bmsleight/lasercut/master/readme/example-005.png)
 
