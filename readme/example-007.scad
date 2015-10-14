@@ -15,6 +15,9 @@ lasercutoutSquare(thickness=thickness, x=x, y=y,
     circles_remove = [
             [r, x/2, y/2],
             [1.5, x/2, y*2/3], // Screw-hole
+        ],
+    slits = [
+            [RIGHT,x,y/2,10]
         ]
     );
     
