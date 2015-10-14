@@ -199,6 +199,6 @@ To adjust the positions of the cut-out, so that are not all along the y-axis the
 
 See [2d_examples_tweak.scad](https://github.com/bmsleight/lasercut/blob/master/2d_examples_tweak.scad)
 
-Which give a files arrangement and can be exported to a new dxf file.
+Which give an arrangement and can be exported to a new dxf file.
 ![alt tag](https://raw.githubusercontent.com/bmsleight/lasercut/master/readme/example-complex-2d-part-tweak-dxf.png)
 
