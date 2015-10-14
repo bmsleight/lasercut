@@ -53,7 +53,7 @@ translate([0,y+20,-thickness]) rotate([90,0,0])
 Great for hold laser-cut sheets together.
 
 ```
-include <../lasercut.scad>; 
+include <lasercut.scad>; 
 
 thickness = 3.1;
 x = 50;
@@ -91,7 +91,7 @@ translate([-20,0,0]) rotate([90,0,90])
 With four, five or six side. Finger joints - the correct alignment to give a flat edge regardless of numebr of sides.
 
 ```
-include <../lasercut.scad>; 
+include <lasercut.scad>; 
 
 thickness = 3.1;
 x = 50;
@@ -112,7 +112,7 @@ for (sides =[4:6])
 
 Simple finger joints, (as automatically used in the box above). Parameters are direction, startup tap, even number) so for example [UP, 1, 4] - UP direction, starting with a tab not a gap, four figners. 
 ```
-include <../lasercut.scad>; 
+include <lasercut.scad>; 
 
 thickness = 3.1;
 x = 50;
@@ -135,10 +135,13 @@ translate([0,y+20,thickness]) rotate([90,0,0])
 ```
 ![alt tag](https://raw.githubusercontent.com/bmsleight/lasercut/master/readme/example-006.png)
 
-## Add or remove circles
+## Add or remove circles, make a slit or cut-out a rectangle
+Circles are [radius, x, y]
+Slits are [direction,x,y,length of slit]
+Cutouts are [x, y, width of cutout, height of cutout]
 
 ```
-include <../lasercut.scad>; 
+include <lasercut.scad>; 
 
 thickness = 3.1;
 x = 50;
@@ -155,8 +158,15 @@ lasercutoutSquare(thickness=thickness, x=x, y=y,
     circles_remove = [
             [r, x/2, y/2],
             [1.5, x/2, y*2/3], // Screw-hole
+        ],
+    slits = [
+            [RIGHT,x,y/2,10]
+        ],
+    cutouts = [
+            [x/6, y/6, thickness*5, thickness*2]
         ]
     );
+    
 ```
 ![alt tag](https://raw.githubusercontent.com/bmsleight/lasercut/master/readme/example-007.png)
     
