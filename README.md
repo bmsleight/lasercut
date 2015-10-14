@@ -1,5 +1,5 @@
 # <lasercut.scad>
-Module for openscad, allowing 3d models to be created from 2d lasercut parts
+Module for openscad, allowing 3d models to be created from 2d lasercut parts, with a flat file automatically generated.
 
 ## Basic usage
 
