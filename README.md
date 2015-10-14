@@ -50,7 +50,7 @@ translate([0,y+20,-thickness]) rotate([90,0,0])
 ![alt tag](https://raw.githubusercontent.com/bmsleight/lasercut/master/readme/example-003.png)
 
 ## Captive Nuts
-Great for hold laser-cut sheets together.
+Great for holding laser-cut sheets together.
 
 ```
 include <lasercut.scad>; 
@@ -88,7 +88,7 @@ translate([-20,0,0]) rotate([90,0,90])
 
 ##  Box
 
-With four, five or six side. Finger joints - the correct alignment to give a flat edge regardless of numebr of sides.
+Easy to make a box with four, five or six side. Uses finger joints with the correct alignment to give a flat edge regardless of number of sides.
 
 ```
 include <lasercut.scad>; 
@@ -189,15 +189,16 @@ This generates three files;
 * 2d_examples.scad.dxf
 
 ### [2d_examples.scad](https://raw.githubusercontent.com/bmsleight/lasercut/master/2d_examples.scad) 
-This is a files show all the shapes along the y-axis.
+This is a openscad file showing all the shapes along the y-axis.
 
 ![alt tag](https://raw.githubusercontent.com/bmsleight/lasercut/master/readme/example-complex-2d-all.png)
 ![alt tag](https://raw.githubusercontent.com/bmsleight/lasercut/master/readme/example-complex-2d-part.png)
 
 
-To adjust the positions of the cut-out, so that are all llisted along the y-axis the parameter flat_adjust can be used, either in the main files or tweaked in the 2d_ file. See [2d_examples_tweak.scad](https://github.com/bmsleight/lasercut/blob/master/2d_examples_tweak.scad)
+To adjust the positions of the cut-out, so that are not all along the y-axis the parameter flat_adjust can be used, either in the main files or tweaked in the 2d_ file. For example flat_adjust = [110, -350]), would put the next peice at 110 in x direction and -250 in y-direction. With just using flat_adjust four times, we get a more practical example. 
 
-For example flat_adjust = [110, -350]), woudl put the next peice at 110 in x direction and -250 in y-direction. With just using flat_adjust four times, we get a more practical example. 
+See [2d_examples_tweak.scad](https://github.com/bmsleight/lasercut/blob/master/2d_examples_tweak.scad)
 
-![alt tag](https://github.com/bmsleight/lasercut/blob/master/readme/example-complex-2d-part-tweak.png)
+Which give a files arrangement and can be exported to a new dxf file.
+![alt tag](https://raw.githubusercontent.com/bmsleight/lasercut/master/readme/example-complex-2d-part-tweak-dxf.png)
 
