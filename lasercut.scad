@@ -22,6 +22,7 @@ module lasercutoutSquare(thickness=3.1, x=0, y=0,
         circles_remove = [],
         slits = [],
         cutouts = [],
+        flat_adjust = [],
 )
 {
     points = [[0,0], [x,0], [x,y], [0,y], [0,0]];
@@ -35,7 +36,8 @@ lasercutout(thickness=thickness,
         circles_add = circles_add,
         circles_remove = circles_remove,
         slits = slits,
-        cutouts = cutouts
+        cutouts = cutouts,
+        flat_adjust = flat_adjust
     );
 }
 
@@ -47,6 +49,7 @@ module lasercutout(thickness=3.1,  points= [],
         circles_remove = [],
         slits = [],
         cutouts = [],
+        flat_adjust = [],
 )
 {
     path_total = len(points);
@@ -113,14 +116,22 @@ module lasercutout(thickness=3.1,  points= [],
         
     }
     
-    if ($children) translate([0, max_y(points) + thickness*3, 0])
-            children();
+    if (flat_adjust)
+    {
+        if ($children) translate([0 + flat_adjust[0], max_y(points) + thickness*3 + flat_adjust[1], 0])
+                children();
+    }
+    else
+    {
+        if ($children) translate([0, max_y(points) + thickness*3, 0])
+                children();        
+    }
 
     if (generate == 1)
     {
         output = str(
-        "[LC] lasercutout(thickness=", thickness, ", \n 
-            points= ", points, ", \n
+        "[LC] lasercutout(thickness = ",thickness,", \n 
+           points = ",points,", \n
             simple_tabs = ",simple_tabs,", \n
             simple_tab_holes = ",simple_tab_holes,", \n
             captive_nuts = ",captive_nuts,", \n
@@ -129,7 +140,8 @@ module lasercutout(thickness=3.1,  points= [],
             circles_add = ",circles_add,", \n
             circles_remove = ",circles_remove,", \n
             slits = ",slits,", \n
-            cutouts = ",cutouts,") \n"
+            cutouts = ",cutouts,", \n
+            flat_adjust = ",flat_adjust,") \n"
         );
         echo(output);
     }
