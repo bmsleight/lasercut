@@ -10,7 +10,7 @@ if (generate == 1)
 {
     // openscad examples.scad -D generate=1 -o /tmp/d.csg 2>&1 >/dev/null  | sed 's/ECHO: \"\[LC\] //' | sed 's/"$//' | sed '$a;' >./generate.scad ; openscad ./generate.scad -o generate.dxf
     // (from http://forum.openscad.org/Sharing-Dump-echo-output-to-a-file-td12529.html)
-    echo("[LC] use <lasercut.scad>; \nprojection(cut = false) \n\t");
+//    echo("[LC] use <lasercut.scad>; \nprojection(cut = false) \n\t");
 }
 
 
@@ -123,7 +123,7 @@ module lasercutout(thickness=3.1,  points= [],
     }
     else
     {
-        if ($children) translate([0, max_y(points) + thickness*3, 0])
+        if ($children) translate([0, max_y(points) + thickness*2, 0])
                 children();        
     }
 
