@@ -18,6 +18,7 @@ module lasercutoutSquare(thickness=3.1, x=0, y=0,
         simple_tabs=[], simple_tab_holes=[], 
         captive_nuts=[], captive_nut_holes = [],
         finger_joints = [],
+        bumpy_finger_joints = [],
 	screw_tabs=[], screw_tab_holes=[],
         circles_add = [],
         circles_remove = [],
@@ -34,6 +35,7 @@ lasercutout(thickness=thickness,
         captive_nuts = captive_nuts, 
         captive_nut_holes = captive_nut_holes,
         finger_joints = finger_joints,
+        bumpy_finger_joints = bumpy_finger_joints,
 	screw_tabs= screw_tabs, screw_tab_holes= screw_tab_holes,
         circles_add = circles_add,
         circles_remove = circles_remove,
@@ -47,6 +49,7 @@ module lasercutout(thickness=3.1,  points= [],
         simple_tabs=[], simple_tab_holes=[], 
         captive_nuts=[], captive_nut_holes = [],
         finger_joints = [],
+        bumpy_finger_joints = [],
 	screw_tabs=[], screw_tab_holes=[],
         circles_add = [],
         circles_remove = [],
@@ -89,6 +92,10 @@ module lasercutout(thickness=3.1,  points= [],
             {
                 fingerJoint(finger_joints[t][0], finger_joints[t][1], finger_joints[t][2], thickness, max_y, min_y, max_x, min_x);
             }    
+            for (t = [0:1:len(bumpy_finger_joints)-1]) 
+            {
+                fingerJoint(bumpy_finger_joints[t][0], bumpy_finger_joints[t][1], bumpy_finger_joints[t][2], thickness, max_y, min_y, max_x, min_x, bumps=true);
+            }
             for (t = [0:1:len(screw_tabs)-1]) 
             {
                 screwTab(screw_tabs[t][0], screw_tabs[t][1], screw_tabs[t][2], screw_tabs[t][3], thickness);
@@ -150,6 +157,9 @@ module lasercutout(thickness=3.1,  points= [],
             captive_nuts = ",captive_nuts,", \n
             captive_nut_holes = ",captive_nut_holes,", \n
             finger_joints = ",finger_joints,", \n
+            bumpy_finger_joints = ",bumpy_finger_joints,", \n
+            screw_tabs = ",screw_tabs,", \n
+            screw_tab_holes = ",screw_tab_holes,", \n
             circles_add = ",circles_add,", \n
             circles_remove = ",circles_remove,", \n
             slits = ",slits,", \n
@@ -189,7 +199,7 @@ module captiveNutBoltHole(angle, x, y, thickness)
     }
 }
 
-module fingerJoint(angle, start_up, fingers, thickness, max_y, min_y, max_x, min_x)
+module fingerJoint(angle, start_up, fingers, thickness, max_y, min_y, max_x, min_x, bumps = false)
 {
     if ( angle == UP )
     {
@@ -197,7 +207,7 @@ module fingerJoint(angle, start_up, fingers, thickness, max_y, min_y, max_x, min
         range_max = max_x; 
         t_x = min_x;
         t_y = max_y;
-        fingers(angle, start_up, fingers, thickness, range_min, range_max, t_x, t_y);
+        fingers(angle, start_up, fingers, thickness, range_min, range_max, t_x, t_y, bumps = bumps);
     }
     if ( angle == DOWN )
     {
@@ -205,7 +215,7 @@ module fingerJoint(angle, start_up, fingers, thickness, max_y, min_y, max_x, min
         range_max = max_x; 
         t_x = max_x;
         t_y = min_y;
-        fingers(angle, start_up, fingers, thickness, range_min, range_max, t_x, t_y);
+        fingers(angle, start_up, fingers, thickness, range_min, range_max, t_x, t_y, bumps = bumps);
     }
     if ( angle == LEFT )
     {
@@ -213,7 +223,7 @@ module fingerJoint(angle, start_up, fingers, thickness, max_y, min_y, max_x, min
         range_max = max_y; 
         t_x = min_x;
         t_y = min_y;
-        fingers(angle, start_up, fingers, thickness, range_min, range_max, t_x, t_y);
+        fingers(angle, start_up, fingers, thickness, range_min, range_max, t_x, t_y, bumps = bumps);
     }
     if ( angle == RIGHT )
     {
@@ -221,12 +231,12 @@ module fingerJoint(angle, start_up, fingers, thickness, max_y, min_y, max_x, min
         range_max = max_y; 
         t_x = max_x;
         t_y = max_y;
-        fingers(angle, start_up, fingers, thickness, range_min, range_max, t_x, t_y);
+        fingers(angle, start_up, fingers, thickness, range_min, range_max, t_x, t_y, bumps = bumps);
     }
 
 }
 
-module fingers(angle, start_up, fingers, thickness, range_min, range_max, t_x, t_y)
+module fingers(angle, start_up, fingers, thickness, range_min, range_max, t_x, t_y, bumps = false)
 {
     // The tweaks to y translate([0, -thickness,0]) ... thickness*2 rather than *1
     // Are to avoid edge cases and make the dxf export better.
@@ -236,13 +246,29 @@ module fingers(angle, start_up, fingers, thickness, range_min, range_max, t_x, t
         for ( i = [range_min : (range_max-range_min)/fingers : range_max - (range_max-range_min)/fingers] )
         {
             if(start_up == 1) 
+            {
+                translate([i,0,0]) 
                 {
-                    translate([i,0,0]) cube([ (range_max-range_min)/(fingers*2), thickness*2, thickness]);
+                    cube([ (range_max-range_min)/(fingers*2), thickness*2, thickness]);
+                    if(bumps == true)
+                    {
+                        translate([(range_max-range_min)/(fingers*2), thickness*1.5, 0]) cylinder(h=thickness, r=thickness/10);
+                    }
                 }
+            }
             else 
             {
-                    translate([i+(range_max-range_min)/(fingers*2),0,0]) cube([ (range_max-range_min)/(fingers*2), thickness*2, thickness]);
-                
+                translate([i+(range_max-range_min)/(fingers*2),0,0]) 
+                {
+                    cube([ (range_max-range_min)/(fingers*2), thickness*2, thickness]);
+                    if(bumps == true)
+                    {
+                        if (i < (range_max - (range_max-range_min)/fingers ))
+                        {
+                            translate([(range_max-range_min)/(fingers*2), thickness*1.5, 0]) cylinder(h=thickness, r=thickness/10);
+                        }
+                    }
+                }
             }
         }
     }
@@ -262,7 +288,6 @@ module screwTabHoleForScrew(angle, x, y, screw, thickness)
 
 module screwTabHole(angle, x, y, screw, thickness)
 {
-    // not to be confused with screwTabHole
      // Special case does not go past edge - so make only 1 thickness y
      if (angle == 360)
      {
