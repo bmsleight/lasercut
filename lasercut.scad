@@ -18,6 +18,7 @@ module lasercutoutSquare(thickness=3.1, x=0, y=0,
         simple_tabs=[], simple_tab_holes=[], 
         captive_nuts=[], captive_nut_holes = [],
         finger_joints = [],
+	screw_tabs=[], screw_tab_holes=[],
         circles_add = [],
         circles_remove = [],
         slits = [],
@@ -33,6 +34,7 @@ lasercutout(thickness=thickness,
         captive_nuts = captive_nuts, 
         captive_nut_holes = captive_nut_holes,
         finger_joints = finger_joints,
+	screw_tabs= screw_tabs, screw_tab_holes= screw_tab_holes,
         circles_add = circles_add,
         circles_remove = circles_remove,
         slits = slits,
@@ -45,6 +47,7 @@ module lasercutout(thickness=3.1,  points= [],
         simple_tabs=[], simple_tab_holes=[], 
         captive_nuts=[], captive_nut_holes = [],
         finger_joints = [],
+	screw_tabs=[], screw_tab_holes=[],
         circles_add = [],
         circles_remove = [],
         slits = [],
@@ -84,9 +87,12 @@ module lasercutout(thickness=3.1,  points= [],
             }    
             for (t = [0:1:len(finger_joints)-1]) 
             {
-                fingerJoint(finger_joints[t][0], finger_joints[t][1], finger_joints[t][2], thickness, max_y, min_y, max_x, min_x) ;
+                fingerJoint(finger_joints[t][0], finger_joints[t][1], finger_joints[t][2], thickness, max_y, min_y, max_x, min_x);
             }    
-            
+            for (t = [0:1:len(screw_tabs)-1]) 
+            {
+                screwTab(screw_tabs[t][0], screw_tabs[t][1], screw_tabs[t][2], screw_tabs[t][3], thickness);
+            }      
         } // end union
 
         for (t = [0:1:len(simple_tab_holes)-1]) 
@@ -113,7 +119,14 @@ module lasercutout(thickness=3.1,  points= [],
         {
                simpleCutouts(cutouts[t][0], cutouts[t][1], cutouts[t][2], cutouts[t][3], thickness);
         }
-        
+        for (t = [0:1:len(screw_tabs)-1]) 
+        {
+               screwTabHoleForScrew(screw_tabs[t][0], screw_tabs[t][1], screw_tabs[t][2], screw_tabs[t][3], thickness);
+        }
+        for (t = [0:1:len(screw_tab_holes)-1]) 
+        {
+               screwTabHole(screw_tab_holes[t][0], screw_tab_holes[t][1], screw_tab_holes[t][2], screw_tab_holes[t][3], thickness);
+        }
     }
     
     if (flat_adjust)
@@ -163,7 +176,7 @@ module simpleTabHole(angle, x, y, thickness)
      }
      else
      {
-         translate([x,y,0]) rotate([0,0,angle-180]) translate([-thickness/2,-thickness,-thickness]) cube([thickness, thickness*2, thickness*3]); 
+         translate([x,y,0]) rotate([0,0,angle-180]) translate([-thickness/2,-thickness,-thickness]) cube([thickness, screw*2, thickness*3]); 
      }
 }
 
@@ -235,6 +248,32 @@ module fingers(angle, start_up, fingers, thickness, range_min, range_max, t_x, t
     }
 
 }
+
+module screwTab(angle, x, y, screw, thickness)
+{
+    translate([x,y,0]) rotate([0,0,angle]) translate([-screw/2,0,0]) cube([screw*2, thickness+screw*2, thickness]); 
+}
+
+module screwTabHoleForScrew(angle, x, y, screw, thickness)
+{
+    // not to be confused with screwTabHole
+    translate([x,y,0]) rotate([0,0,angle]) translate([screw/2,thickness+screw,-thickness]) cylinder(h=thickness*3, r=screw/2); 
+}
+
+module screwTabHole(angle, x, y, screw, thickness)
+{
+    // not to be confused with screwTabHole
+     // Special case does not go past edge - so make only 1 thickness y
+     if (angle == 360)
+     {
+         translate([x,y,0]) rotate([0,0,0]) translate([0,0,-thickness]) cube([screw*2, thickness, thickness*3]); 
+     }
+     else
+     {
+         translate([x,y,0]) rotate([0,0,angle-180]) translate([-thickness/2,-thickness,-thickness]) cube([thickness, thickness*2, thickness*3]); 
+     }
+}
+
 
 module captiveNutTab(angle, x, y, thickness)
 {
