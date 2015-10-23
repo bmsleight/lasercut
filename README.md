@@ -111,18 +111,23 @@ for (sides =[4:6])
 ##  Finger Joints
 
 Simple finger joints, (as automatically used in the box above). Parameters are direction, startup tap, even number) so for example [UP, 1, 4] - UP direction, starting with a tab not a gap, four figners. 
-```
-include <lasercut.scad>; 
 
+[As suggested in the OpenSCAD forum,](http://forum.openscad.org/Lasercut-tp14126p14174.html) bumpy_finger_joints, when printed in wood the dimple will crush a little and ensure a press fit. 
+
+```
+include <../lasercut.scad>; 
+
+$fn=60;
 thickness = 3.1;
 x = 50;
 y = 100;
 lasercutoutSquare(thickness=thickness, x=x, y=y,
-    finger_joints=[
+    bumpy_finger_joints=[
             [UP, 1, 4],
             [DOWN, 1, 4]
         ]
     );
+
 
 translate([0,y+20,thickness]) rotate([90,0,0]) 
     lasercutoutSquare(thickness=thickness, x=x, y=y,
@@ -133,7 +138,7 @@ translate([0,y+20,thickness]) rotate([90,0,0])
     );
   
 ```
-![alt tag](https://raw.githubusercontent.com/bmsleight/lasercut/master/readme/example-006.png)
+![alt tag](https://raw.githubusercontent.com/bmsleight/lasercut/master/readme/example-006b.png)
 
 ## Tabs Held in Place by Screws
 
