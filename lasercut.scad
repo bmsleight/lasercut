@@ -19,7 +19,8 @@ module lasercutoutSquare(thickness=3.1, x=0, y=0,
         captive_nuts=[], captive_nut_holes = [],
         finger_joints = [],
         bumpy_finger_joints = [],
-	screw_tabs=[], screw_tab_holes=[],
+        screw_tabs=[], screw_tab_holes=[],
+        twist_holes=[], twist_connect=[],
         circles_add = [],
         circles_remove = [],
         slits = [],
@@ -36,7 +37,8 @@ lasercutout(thickness=thickness,
         captive_nut_holes = captive_nut_holes,
         finger_joints = finger_joints,
         bumpy_finger_joints = bumpy_finger_joints,
-	screw_tabs= screw_tabs, screw_tab_holes= screw_tab_holes,
+        screw_tabs= screw_tabs, screw_tab_holes= screw_tab_holes,
+        twist_holes=twist_holes, twist_connect=twist_connect,
         circles_add = circles_add,
         circles_remove = circles_remove,
         slits = slits,
@@ -50,7 +52,8 @@ module lasercutout(thickness=3.1,  points= [],
         captive_nuts=[], captive_nut_holes = [],
         finger_joints = [],
         bumpy_finger_joints = [],
-	screw_tabs=[], screw_tab_holes=[],
+        screw_tabs=[], screw_tab_holes=[],
+        twist_holes=[], twist_connect=[],
         circles_add = [],
         circles_remove = [],
         slits = [],
@@ -113,6 +116,15 @@ module lasercutout(thickness=3.1,  points= [],
         for (t = [0:1:len(captive_nut_holes)-1]) 
         {
             captiveNutHole(captive_nut_holes[t][0], captive_nut_holes[t][1], captive_nut_holes[t][2], thickness);
+        }    
+        for (t = [0:1:len(twist_holes)-1]) 
+        {
+            twistHole(twist_holes[t][0], twist_holes[t][1], twist_holes[t][2], thickness);
+        }    
+        for (t = [0:1:len(twist_connect)-1]) 
+        {
+            twistConnect(twist_connect[t][0], twist_connect[t][1], twist_connect[t][2], thickness, max_y, min_y, max_x, min_x);
+            echo("!!");
         }    
         for (t = [0:1:len(circles_remove)-1]) 
         {
@@ -328,6 +340,46 @@ module captiveNutHole(angle, x, y, thickness)
         translate([-thickness/2-thickness*4,-thickness*2,-thickness]) cube([thickness*3, thickness, thickness*3]); 
     }
 }
+
+module twistHole(angle, x, y, thickness)
+{
+    translate([x,y,0]) rotate([0,0,angle-90]) union()
+    {
+        cube([thickness*7, thickness, thickness*3], center=true); 
+        difference()
+        {
+           translate([0,0, -thickness]) cylinder(h=thickness*3, r=thickness*3/2);
+           translate([-thickness*3/2,thickness,0]) cube([thickness*2, thickness, thickness*3], center=true); 
+           translate([thickness*3/2,-thickness,0]) cube([thickness*2, thickness, thickness*3], center=true); 
+        }
+    }
+}
+
+module twistConnect(angle, x, y, thickness, max_y, min_y, max_x, min_x)
+{
+    // Really should do trianometry for non-90 Angles, but hey ho
+    if( (angle == LEFT) || (angle == RIGHT) )
+    {
+        translate([0,y,-thickness]) rotate([0,0,angle+90]) union()
+        {
+            gap = max_x - min_x;
+            echo(gap);
+            translate([-gap/2-(thickness*3/2),0,0]) cube([gap, thickness, thickness*3]); 
+            translate([+gap/2+(thickness*3/2),0,0]) cube([gap, thickness, thickness*3]); 
+        }
+    }
+    if( (angle == UP) || (angle == DOWN) )
+    {
+        translate([x,0,-thickness]) rotate([0,0,angle+90]) union()
+        {
+            gap = max_y - min_y;
+            echo(gap);
+            translate([-gap/2-(thickness*3/2),0,0]) cube([gap, thickness, thickness*3]); 
+            translate([+gap/2+(thickness*3/2),0,0]) cube([gap, thickness, thickness*3]); 
+        }
+    }
+}
+
 
 module circlesAdd(radius, x, y, thickness)
 {
