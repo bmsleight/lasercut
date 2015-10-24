@@ -14,7 +14,12 @@ module support()
             [MID, x*.25-thickness/2, height/2], 
             [MID, x*.75-thickness/2, height/2]
             ],
-        captive_nuts=[[UP, x/2, height] ]
+        captive_nuts=[
+            [UP, x/2, height] 
+            ],
+        twist_holes=[
+            [RIGHT, x/2, height/4, height/2]
+            ]
     );   
 }
 
@@ -27,6 +32,18 @@ module stut()
             ]
         );   
 }
+
+module beam()
+{
+    rotate([0,90.0])
+    lasercutoutSquare(thickness=thickness, x=height/2, y=y,
+        twist_connect=[
+            [RIGHT,height/4,thickness*2],
+            [RIGHT,height/4,y-thickness*3]
+            ]
+        );   
+}
+
 
 module box()
 {
@@ -44,4 +61,5 @@ module box()
 translate([0,thickness*3,0]) rotate([90,0,0]) support();
 translate([0,y-thickness*2,0]) rotate([90,0,0]) support();
 translate([0,thickness*3,height/2]) stut();
+translate([x/2-thickness/2,0,height/2]) beam();
 translate([0,0,height]) box();
