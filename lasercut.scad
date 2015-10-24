@@ -177,6 +177,10 @@ module lasercutout(thickness=3.1,  points= [],
             echo(str("[LC]         , screw_tabs = ", screw_tabs));
         if(screw_tab_holes)
             echo(str("[LC]         , screw_tab_holes = ", screw_tab_holes));
+        if(twist_holes)
+            echo(str("[LC]         , twist_holes = ", twist_holes));
+        if(twist_connect)
+            echo(str("[LC]         , twist_connect = ", twist_connect));
         if(circles_add)
             echo(str("[LC]         , circles_add = ", circles_add));
         if(circles_remove)
