@@ -124,7 +124,6 @@ module lasercutout(thickness=3.1,  points= [],
         for (t = [0:1:len(twist_connect)-1]) 
         {
             twistConnect(twist_connect[t][0], twist_connect[t][1], twist_connect[t][2], thickness, max_y, min_y, max_x, min_x);
-            echo("!!");
         }    
         for (t = [0:1:len(circles_remove)-1]) 
         {
@@ -369,7 +368,6 @@ module twistConnect(angle, x, y, thickness, max_y, min_y, max_x, min_x)
         translate([0,y,-thickness]) rotate([0,0,angle+90]) union()
         {
             gap = max_x - min_x;
-            echo(gap);
             translate([-gap/2-(thickness*3/2),0,0]) cube([gap, thickness, thickness*3]); 
             translate([+gap/2+(thickness*3/2),0,0]) cube([gap, thickness, thickness*3]); 
         }
