@@ -143,30 +143,40 @@ module lasercutout(thickness=3.1,  points= [],
     }
     else
     {
-        if ($children) translate([0, max_y(points) + thickness*2, 0])
+        if ($children) translate([0, max_y(points) + thickness*2.5, 0])
                 children();        
     }
 
     if (generate == 1)
     {
-        output = str(
-        "[LC] lasercutout(thickness = ",thickness,", \n 
-           points = ",points,", \n
-            simple_tabs = ",simple_tabs,", \n
-            simple_tab_holes = ",simple_tab_holes,", \n
-            captive_nuts = ",captive_nuts,", \n
-            captive_nut_holes = ",captive_nut_holes,", \n
-            finger_joints = ",finger_joints,", \n
-            bumpy_finger_joints = ",bumpy_finger_joints,", \n
-            screw_tabs = ",screw_tabs,", \n
-            screw_tab_holes = ",screw_tab_holes,", \n
-            circles_add = ",circles_add,", \n
-            circles_remove = ",circles_remove,", \n
-            slits = ",slits,", \n
-            cutouts = ",cutouts,", \n
-            flat_adjust = ",flat_adjust,") \n"
-        );
-        echo(output);
+        echo(str("[LC] lasercutout(thickness = ",thickness,", \n          points = ",points));
+        if(simple_tabs)
+            echo(str("[LC]         , simple_tabs = ", simple_tabs));
+        if(simple_tab_holes)
+            echo(str("[LC]         , simple_tab_holes = ", simple_tab_holes));
+        if(captive_nuts)
+            echo(str("[LC]         , captive_nuts = ", captive_nuts));
+        if(captive_nut_holes)
+            echo(str("[LC]         , captive_nut_holes = ", captive_nut_holes));
+        if(finger_joints)
+            echo(str("[LC]         , finger_joints = ", finger_joints));
+        if(bumpy_finger_joints)
+            echo(str("[LC]         , bumpy_finger_joints = ", bumpy_finger_joints));
+        if(screw_tabs)
+            echo(str("[LC]         , screw_tabs = ", screw_tabs));
+        if(screw_tab_holes)
+            echo(str("[LC]         , screw_tab_holes = ", screw_tab_holes));
+        if(circles_add)
+            echo(str("[LC]         , circles_add = ", circles_add));
+        if(circles_remove)
+            echo(str("[LC]         , circles_remove = ", circles_remove));
+        if(slits)
+            echo(str("[LC]         , slits = ", slits));
+        if(cutouts)
+            echo(str("[LC]         , cutouts = ", cutouts));
+        if(flat_adjust)
+            echo(str("[LC]         , flat_adjust = ", flat_adjust));
+        echo("[LC]         ) \n");
     }
 }
 
