@@ -119,7 +119,7 @@ module lasercutout(thickness=3.1,  points= [],
         }    
         for (t = [0:1:len(twist_holes)-1]) 
         {
-            twistHole(twist_holes[t][0], twist_holes[t][1], twist_holes[t][2], thickness);
+            twistHole(twist_holes[t][0], twist_holes[t][1], twist_holes[t][2], twist_holes[t][3], thickness);
         }    
         for (t = [0:1:len(twist_connect)-1]) 
         {
@@ -341,14 +341,20 @@ module captiveNutHole(angle, x, y, thickness)
     }
 }
 
-module twistHole(angle, x, y, thickness)
+module twistHole(angle, x, y, width, thickness)
 {
+// http://msraynsford.blogspot.co.uk/2012/06/panel-joinery-10.html
     translate([x,y,0]) rotate([0,0,angle-90]) union()
     {
-        cube([thickness*7, thickness, thickness*3], center=true); 
+        cube([width, thickness, thickness*3], center=true); 
         difference()
         {
-           translate([0,0, -thickness]) cylinder(h=thickness*3, r=thickness*3/2);
+            // Need some trig,  radius is hypo of triangle
+            // Other sides are thinkness/2 and thinkness*3
+            // 
+            // 
+           radius = sqrt(  ((thickness/2)*(thickness/2)) + (thickness*1.5*thickness*1.5) ); 
+           translate([0,0, -thickness]) cylinder(h=thickness*3, r=radius);
            translate([-thickness*3/2,thickness,0]) cube([thickness*2, thickness, thickness*3], center=true); 
            translate([thickness*3/2,-thickness,0]) cube([thickness*2, thickness, thickness*3], center=true); 
         }
