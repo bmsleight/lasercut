@@ -228,7 +228,7 @@ translate([(x-x_beam)/2,y/2+50-thickness,y*1/4-thickness/2]) rotate([0,0,0]) bea
 
 Loosley based upon http://www.deferredprocrastination.co.uk/blog/2013/so-whats-a-practical-laser-cut-clip-size/ the clip and mathcing hole. Should be good for acrylic, mdf but maybe not plywood. 
  
- This is qquite a long connnector (thickness * 11) to allow the material to bend and clip in place.
+ This is quite a long connnector (thickness * 11) to allow the material to bend and clip in place.
 
 ```
 include <../lasercut.scad>; 
