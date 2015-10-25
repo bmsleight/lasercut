@@ -136,6 +136,10 @@ module lasercutout(thickness=3.1,  points= [],
         {
             clipInner(clips[t][0], clips[t][1], clips[t][2], thickness);
         }    
+        for (t = [0:1:len(clip_holes)-1]) 
+        {
+            clipHole(clip_holes[t][0], clip_holes[t][1], clip_holes[t][2], thickness);
+        }    
         for (t = [0:1:len(circles_remove)-1]) 
         {
             circlesRemove(circles_remove[t][0], circles_remove[t][1], circles_remove[t][2], thickness);
@@ -407,26 +411,42 @@ module clipInner(angle, x, y, thickness)
 {
     translate([x,y,0]) rotate([0,0,angle]) union()
     {
-        translate([-(1+thickness)/2,-thickness*10,-thickness]) cube([1, thickness*11, thickness*3]);
-        translate([(1+thickness)/2+1,-thickness*8,0])  linear_extrude(height = thickness*3, center = true)  polygon(points=[[0,0],[0,9*thickness],[-(thickness-1), 9*thickness]]);
-          translate([(1+thickness)/2+1-thickness+1,thickness-1,-thickness]) cube([thickness, thickness, thickness*3]);
-          translate([-thickness*3/2,0,-thickness]) cube([thickness, thickness, thickness*3]);
+        translate([-thickness/2-1,0,0])
+        {
+            translate([-(1+thickness)/2,-thickness*10,-thickness]) cube([1, thickness*11, thickness*3]);
+            translate([(1+thickness)/2+1,-thickness*8,0])  linear_extrude(height = thickness*3, center = true)  polygon(points=[[0,0],[0,9*thickness],[-(thickness-1), 9*thickness]]);
+            translate([(1+thickness)/2+1-thickness+1,thickness-1,-thickness]) cube([thickness/2, thickness, thickness*3]);
+            translate([-thickness*3/2,0,-thickness]) cube([thickness, thickness, thickness*3]);
         }
+    }
 }
 
 module clipTab(angle, x, y, thickness)
 {
     translate([x,y,0]) rotate([0,0,angle]) union()
     {
-        difference()
+        // make off-center
+        translate([-thickness/2-1,0,0])
         {
-             translate([0,thickness/2,thickness/2]) cube([thickness+1,thickness,thickness], center=true);
-             translate([(1+thickness)/2+1,-thickness*8,0])  linear_extrude(height = thickness*3, center = true)  polygon(points=[[0,0],[0,9*thickness],[-(thickness-1), 9*thickness]]);
+            difference()
+            {
+                 translate([0,thickness/2,thickness/2]) cube([thickness+1,thickness,thickness], center=true);
+                 translate([(1+thickness)/2+1,-thickness*8,0])  linear_extrude(height = thickness*3, center = true)  polygon(points=[[0,0],[0,9*thickness],[-(thickness-1), 9*thickness]]);
+            }
+           translate([-thickness,thickness,0])  linear_extrude(height = thickness)  polygon(points=[[0,0],[thickness+1,0],[thickness,thickness-1],[1,thickness-1]]);
         }
-       translate([-thickness,thickness,0])  linear_extrude(height = thickness)  polygon(points=[[0,0],[thickness+1,0],[thickness,thickness-1],[1,thickness-1]]);
+        translate([0.5,0,0]) cube([thickness,thickness,thickness]);
+*       cube([thickness*2+1,thickness,thickness], center=true);       
     }
 }
 
+module clipHole(angle, x, y, thickness)
+{
+    translate([x,y,0]) rotate([0,0,angle]) union()
+    {
+        translate([0,0,thickness/2]) cube([thickness*2+1,thickness,thickness*3], center=true);
+    }
+}
 
 module circlesAdd(radius, x, y, thickness)
 {
