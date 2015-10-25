@@ -21,6 +21,7 @@ module lasercutoutSquare(thickness=3.1, x=0, y=0,
         bumpy_finger_joints = [],
         screw_tabs=[], screw_tab_holes=[],
         twist_holes=[], twist_connect=[],
+        clips=[], clip_holes=[],
         circles_add = [],
         circles_remove = [],
         slits = [],
@@ -39,6 +40,7 @@ lasercutout(thickness=thickness,
         bumpy_finger_joints = bumpy_finger_joints,
         screw_tabs= screw_tabs, screw_tab_holes= screw_tab_holes,
         twist_holes=twist_holes, twist_connect=twist_connect,
+        clips=clips, clip_holes=clip_holes,
         circles_add = circles_add,
         circles_remove = circles_remove,
         slits = slits,
@@ -54,6 +56,7 @@ module lasercutout(thickness=3.1,  points= [],
         bumpy_finger_joints = [],
         screw_tabs=[], screw_tab_holes=[],
         twist_holes=[], twist_connect=[],
+        clips=[], clip_holes=[],
         circles_add = [],
         circles_remove = [],
         slits = [],
@@ -103,6 +106,10 @@ module lasercutout(thickness=3.1,  points= [],
             {
                 screwTab(screw_tabs[t][0], screw_tabs[t][1], screw_tabs[t][2], screw_tabs[t][3], thickness);
             }      
+             for (t = [0:1:len(clips)-1]) 
+            {
+                clipTab(clips[t][0], clips[t][1], clips[t][2], thickness);
+            }  
         } // end union
 
         for (t = [0:1:len(simple_tab_holes)-1]) 
@@ -124,6 +131,10 @@ module lasercutout(thickness=3.1,  points= [],
         for (t = [0:1:len(twist_connect)-1]) 
         {
             twistConnect(twist_connect[t][0], twist_connect[t][1], twist_connect[t][2], thickness, max_y, min_y, max_x, min_x);
+        }    
+        for (t = [0:1:len(clips)-1]) 
+        {
+            clipInner(clips[t][0], clips[t][1], clips[t][2], thickness);
         }    
         for (t = [0:1:len(circles_remove)-1]) 
         {
@@ -181,6 +192,10 @@ module lasercutout(thickness=3.1,  points= [],
             echo(str("[LC]         , twist_holes = ", twist_holes));
         if(twist_connect)
             echo(str("[LC]         , twist_connect = ", twist_connect));
+        if(clips)
+            echo(str("[LC]         , clips = ", clips));
+        if(clip_holes)
+            echo(str("[LC]         , clip_holes = ", clip_holes));
         if(circles_add)
             echo(str("[LC]         , circles_add = ", circles_add));
         if(circles_remove)
@@ -385,6 +400,30 @@ module twistConnect(angle, x, y, thickness, max_y, min_y, max_x, min_x)
             translate([-gap/2-(thickness*3/2),0,0]) cube([gap, thickness, thickness*3]); 
             translate([+gap/2+(thickness*3/2),0,0]) cube([gap, thickness, thickness*3]); 
         }
+    }
+}
+
+module clipInner(angle, x, y, thickness)
+{
+    translate([x,y,0]) rotate([0,0,angle]) union()
+    {
+        translate([-(1+thickness)/2,-thickness*10,-thickness]) cube([1, thickness*11, thickness*3]);
+        translate([(1+thickness)/2+1,-thickness*8,0])  linear_extrude(height = thickness*3, center = true)  polygon(points=[[0,0],[0,9*thickness],[-(thickness-1), 9*thickness]]);
+          translate([(1+thickness)/2+1-thickness+1,thickness-1,-thickness]) cube([thickness, thickness, thickness*3]);
+          translate([-thickness*3/2,0,-thickness]) cube([thickness, thickness, thickness*3]);
+        }
+}
+
+module clipTab(angle, x, y, thickness)
+{
+    translate([x,y,0]) rotate([0,0,angle]) union()
+    {
+        difference()
+        {
+             translate([0,thickness/2,thickness/2]) cube([thickness+1,thickness,thickness], center=true);
+             translate([(1+thickness)/2+1,-thickness*8,0])  linear_extrude(height = thickness*3, center = true)  polygon(points=[[0,0],[0,9*thickness],[-(thickness-1), 9*thickness]]);
+        }
+       translate([-thickness,thickness,0])  linear_extrude(height = thickness)  polygon(points=[[0,0],[thickness+1,0],[thickness,thickness-1],[1,thickness-1]]);
     }
 }
 
