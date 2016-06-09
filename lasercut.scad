@@ -290,36 +290,6 @@ module fingers(angle, start_up, fingers, thickness, range_min, range_max, t_x, t
     // All fun
     translate([t_x, t_y,0]) rotate([0,0,angle]) translate([0, -thickness,0])
     {
-	
-	/*
-		if(start_up == 1) 
-		{
-		
-			translate([range_min,0,0]) 
-			{
-				cube([ (range_max-range_min)/(fingers*2) + kerf/4, thickness*2, thickness]);
-				if(bumps == true)
-				{
-					translate([(range_max-range_min)/(fingers*2), thickness*1.5, 0]) cylinder(h=thickness, r=thickness/10);
-				}
-			}
-		}
-		else 
-		{
-			translate([(range_max-range_min)/(fingers*2),0,0]) 
-			{
-				cube([ (range_max-range_min)/(fingers*2)+ kerf/4, thickness*2, thickness]);
-				if(bumps == true)
-				{
-					if (i < (range_max - (range_max-range_min)/fingers ))
-					{
-						translate([(range_max-range_min)/(fingers*2), thickness*1.5, 0]) cylinder(h=thickness, r=thickness/10);
-					}
-				}
-			}
-		}		
-	*/
- //       for ( i = [range_min + ((range_max-range_min)/fingers) : (range_max-range_min)/fingers : range_max - (range_max-range_min)/fingers] )
         for ( p = [ 0 : 1 : fingers-1] )
 		{
 		
