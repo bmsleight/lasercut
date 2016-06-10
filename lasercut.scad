@@ -3,7 +3,7 @@ DOWN = 180;
 LEFT = 90;
 RIGHT = 270;
 MID = 360;
-kerf=0.0;// Hacky global for kerf
+kerf=0.15;// Hacky global for kerf
 
 generate = $generate == undef ? 0: $generate; 
 
@@ -512,11 +512,14 @@ module lasercutoutBox(thickness, x=0, y=0, z=0, sides=6,
     }
     if (sides==5)
     {
+	/*
         st = [
         [[DOWN, -thickness/2, 0], [DOWN, -thickness/2, y-thickness] ],
         [[DOWN, -thickness/2, 0], ],
         [[UP, -thickness/2, z-thickness*2], ],
         ];
+		*/
+		st=[];
         fj = [
             [ [UP, 1, 4], [DOWN, 1, 4], [LEFT, 1, 4],   ],
             [ [UP, 0, 4], [DOWN, 1, 4], [LEFT, 1, 4],   ],
@@ -538,12 +541,15 @@ module lasercutoutBox(thickness, x=0, y=0, z=0, sides=6,
         }
     if (sides==6)
     {
+	/*
         st = [
         [[DOWN, -thickness/2, 0], [DOWN, -thickness/2, y-thickness] , [RIGHT, x-thickness*2, -thickness/2]],
         [[DOWN, -thickness/2, 0], [RIGHT, x-thickness*2, -thickness/2]],
         [[UP, -thickness/2, z-thickness*2], [DOWN, x-thickness*1.5, 0], ],
         [[UP, z-thickness*1.5, y-thickness*2], ],
         ];
+		*/
+		st=[];
         fj = [
             [ [UP, 1, 4], [DOWN, 1, 4], [LEFT, 1, 4], [RIGHT, 0, 4]  ],
             [ [UP, 0, 4], [DOWN, 1, 4], [LEFT, 1, 4], [RIGHT, 0, 4]  ],
