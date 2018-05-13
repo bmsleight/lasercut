@@ -172,7 +172,7 @@ translate([0,y+20,thickness]) rotate([90,0,0])
         milling_bit=3.125
     );
 ```
-![alt tag](https://raw.githubusercontent.com/bmsleight/lasercut/master/readme/example-0012.png)
+![alt tag](https://raw.githubusercontent.com/bmsleight/lasercut/master/readme/example-012.png)
     
 
 ## Tabs Held in Place by Screws
