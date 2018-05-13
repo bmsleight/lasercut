@@ -1,6 +1,8 @@
 # <lasercut.scad>
 Module for openscad, allowing 3d models to be created from 2d lasercut parts, with a flat file automatically generated.
 
+Updated, not just lasercut can now pass the parameter milling_bit for CNC machines, for the bit to cut in to the corners. 
+
 ## Basic usage
 
 To prepare a simple rectangle use lasercutoutSquare()
@@ -139,6 +141,39 @@ translate([0,y+20,thickness]) rotate([90,0,0])
   
 ```
 ![alt tag](https://raw.githubusercontent.com/bmsleight/lasercut/master/readme/example-006b.png)
+
+
+##  Finger Joints Milled
+
+Simple finger joints, (as automatically used in the box above), but now using the parameter milling_bit for the bit to cut in to the corners.
+
+```
+include <../lasercut.scad>; 
+
+$fn=60;
+thickness = 3.1;
+x = 130;
+y = 100;
+lasercutoutSquare(thickness=thickness, x=x, y=y,
+    finger_joints=[
+            [UP, 0, 3],
+            [DOWN, 1, 3]
+        ],
+        milling_bit=3.125
+    );
+
+
+translate([0,y+20,thickness]) rotate([90,0,0]) 
+    lasercutoutSquare(thickness=thickness, x=x, y=y,
+        finger_joints=[
+                [UP, 1, 3],
+                [DOWN, 0, 3]
+            ],
+        milling_bit=3.125
+    );
+```
+![alt tag](https://raw.githubusercontent.com/bmsleight/lasercut/master/readme/example-0012.png)
+    
 
 ## Tabs Held in Place by Screws
 
@@ -307,7 +342,7 @@ lasercutoutSquare(thickness=thickness, x=x, y=y,
 ## Complex Example
 Putting these all together - gives a better example - https://github.com/bmsleight/lasercut/blob/master/examples.scad
 
-![alt tag](https://raw.githubusercontent.com/bmsleight/lasercut/master/readme/example-complex.png)
+![alt tag](https://raw.githubusercontent.com/bmsleight/lasercut/master/readme/example-complexf.png)
 
 
 ## Automatically Generate Files Ready for Laser-Cutter
