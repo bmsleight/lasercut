@@ -478,7 +478,7 @@ module simpleCutouts(x, y, width, height, thickness)
      translate([x,y,0]) rotate([0,0,0]) translate([0,0,-thickness]) cube([width, height, thickness*3]);     
 }
 
-module lasercutoutBox(thickness, x=0, y=0, z=0, sides=6,
+module lasercutoutBox(thickness, x=0, y=0, z=0, sides=6, num_fingers=4,
         simple_tab_holes_a=[], 
         captive_nuts_a=[], captive_nut_holes_a=[],
         screw_tab_holes_a=[],
@@ -494,10 +494,10 @@ module lasercutoutBox(thickness, x=0, y=0, z=0, sides=6,
     if (sides==4)
     {
         fj = [
-            [ [UP, 1, 4], [DOWN, 1, 4],    ],
-            [ [UP, 0, 4], [DOWN, 1, 4],    ],
-            [ [UP, 1, 4], [DOWN, 0, 4],    ],
-            [ [UP, 1, 4], [DOWN, 1, 4],    ],
+            [ [UP, 1, num_fingers], [DOWN, 1, num_fingers],    ],
+            [ [UP, 0, num_fingers], [DOWN, 1, num_fingers],    ],
+            [ [UP, 1, num_fingers], [DOWN, 0, num_fingers],    ],
+            [ [UP, 1, num_fingers], [DOWN, 1, num_fingers],    ],
         ];
         translate([0,thickness,0]) lasercutoutBoxAdjustedFJ(thickness = thickness, x=x, y=y-thickness*2 , z=z-thickness*2, sides=sides, fj=fj,
             simple_tab_holes_a=simple_tab_holes_a, 
@@ -518,11 +518,11 @@ module lasercutoutBox(thickness, x=0, y=0, z=0, sides=6,
         [[UP, -thickness/2, z-thickness*2], ],
         ];
         fj = [
-            [ [UP, 1, 4], [DOWN, 1, 4], [LEFT, 1, 4],   ],
-            [ [UP, 0, 4], [DOWN, 1, 4], [LEFT, 1, 4],   ],
-            [ [UP, 1, 4], [DOWN, 0, 4], [LEFT, 1, 4],   ],
-            [ [UP, 1, 4], [DOWN, 1, 4], [LEFT, 1, 4],   ],
-            [ [UP, 0, 4], [DOWN, 1, 4], [LEFT, 0, 4], [RIGHT, 1, 4]  ],
+            [ [UP, 1, num_fingers], [DOWN, 1, num_fingers], [LEFT, 1, num_fingers],   ],
+            [ [UP, 0, num_fingers], [DOWN, 1, num_fingers], [LEFT, 1, num_fingers],   ],
+            [ [UP, 1, num_fingers], [DOWN, 0, num_fingers], [LEFT, 1, num_fingers],   ],
+            [ [UP, 1, num_fingers], [DOWN, 1, num_fingers], [LEFT, 1, num_fingers],   ],
+            [ [UP, 0, num_fingers], [DOWN, 1, num_fingers], [LEFT, 0, num_fingers], [RIGHT, 1, num_fingers]  ],
         ];
         
         translate([thickness,thickness,0]) lasercutoutBoxAdjustedFJ(thickness = thickness, x=x-thickness, y=y-thickness*2 , z=z-thickness*2, sides=sides, fj=fj, st=st,
@@ -545,12 +545,12 @@ module lasercutoutBox(thickness, x=0, y=0, z=0, sides=6,
         [[UP, z-thickness*1.5, y-thickness*2], ],
         ];
         fj = [
-            [ [UP, 1, 4], [DOWN, 1, 4], [LEFT, 1, 4], [RIGHT, 0, 4]  ],
-            [ [UP, 0, 4], [DOWN, 1, 4], [LEFT, 1, 4], [RIGHT, 0, 4]  ],
-            [ [UP, 1, 4], [DOWN, 0, 4], [LEFT, 1, 4], [RIGHT, 0, 4]  ],
-            [ [UP, 1, 4], [DOWN, 1, 4], [LEFT, 1, 4], [RIGHT, 0, 4]  ],
-            [ [UP, 0, 4], [DOWN, 1, 4], [LEFT, 0, 4], [RIGHT, 1, 4]  ],
-            [ [UP, 0, 4], [DOWN, 1, 4], [LEFT, 0, 4], [RIGHT, 1, 4]  ],
+            [ [UP, 1, num_fingers], [DOWN, 1, num_fingers], [LEFT, 1, num_fingers], [RIGHT, 0, num_fingers]  ],
+            [ [UP, 0, num_fingers], [DOWN, 1, num_fingers], [LEFT, 1, num_fingers], [RIGHT, 0, num_fingers]  ],
+            [ [UP, 1, num_fingers], [DOWN, 0, num_fingers], [LEFT, 1, num_fingers], [RIGHT, 0, num_fingers]  ],
+            [ [UP, 1, num_fingers], [DOWN, 1, num_fingers], [LEFT, 1, num_fingers], [RIGHT, 0, num_fingers]  ],
+            [ [UP, 0, num_fingers], [DOWN, 1, num_fingers], [LEFT, 0, num_fingers], [RIGHT, 1, num_fingers]  ],
+            [ [UP, 0, num_fingers], [DOWN, 1, num_fingers], [LEFT, 0, num_fingers], [RIGHT, 1, num_fingers]  ],
         ];
         translate([thickness,thickness,0]) lasercutoutBoxAdjustedFJ(thickness = thickness, x=x-thickness*2, y=y-thickness*2 , z=z-thickness*2, sides=sides, fj=fj, st=st,
             simple_tab_holes_a=simple_tab_holes_a, 
