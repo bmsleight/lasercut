@@ -169,7 +169,7 @@ module lasercutout(thickness,  points= [],
         {
             for (t = [0:1:len(finger_joints)-1]) 
             {
-                    fingerJoint(finger_joints[t][0], finger_joints[t][1], finger_joints[t][2], thickness, max_y, min_y, max_x, min_x, not_mill=false);
+                    fingerJoint(finger_joints[t][0], finger_joints[t][1], finger_joints[t][2], thickness, max_y, min_y, max_x, min_x, not_mill=false, milling_bit=milling_bit);
             } 
         }
     }
@@ -257,7 +257,7 @@ module captiveNutBoltHole(angle, x, y, thickness)
     }
 }
 
-module fingerJoint(angle, start_up, fingers, thickness, max_y, min_y, max_x, min_x, bumps = false, not_mill=true)
+module fingerJoint(angle, start_up, fingers, thickness, max_y, min_y, max_x, min_x, bumps = false, not_mill=true, milling_bit=0)
 {
     if ( angle == UP )
     {
@@ -271,7 +271,7 @@ module fingerJoint(angle, start_up, fingers, thickness, max_y, min_y, max_x, min
         }
         else
         {
-            fingers_mill(angle, start_up, fingers, thickness, range_min, range_max, t_x, t_y, bumps = bumps);
+            fingers_mill(angle, start_up, fingers, thickness, range_min, range_max, t_x, t_y, bit=milling_bit);
         }
     }
     if ( angle == DOWN )
@@ -286,7 +286,7 @@ module fingerJoint(angle, start_up, fingers, thickness, max_y, min_y, max_x, min
         }
         else
         {
-            fingers_mill(angle, start_up, fingers, thickness, range_min, range_max, t_x, t_y, bumps = bumps);
+            fingers_mill(angle, start_up, fingers, thickness, range_min, range_max, t_x, t_y, bit=milling_bit);
         }
     }
     if ( angle == LEFT )
@@ -301,7 +301,7 @@ module fingerJoint(angle, start_up, fingers, thickness, max_y, min_y, max_x, min
         }
         else
         {
-            fingers_mill(angle, start_up, fingers, thickness, range_min, range_max, t_x, t_y, bumps = bumps);
+            fingers_mill(angle, start_up, fingers, thickness, range_min, range_max, t_x, t_y, bit=milling_bit);
         }
     }
     if ( angle == RIGHT )
@@ -316,7 +316,7 @@ module fingerJoint(angle, start_up, fingers, thickness, max_y, min_y, max_x, min
         }
         else
         {
-            fingers_mill(angle, start_up, fingers, thickness, range_min, range_max, t_x, t_y, bumps = bumps);
+            fingers_mill(angle, start_up, fingers, thickness, range_min, range_max, t_x, t_y, bit=milling_bit);
         }
     }
 
@@ -722,12 +722,13 @@ module lasercutoutBoxAdjustedFJ(thickness, x=0, y=0, z=0, sides=6, fj=[], st=[],
                                 clip_holes = clip_holes_a[4],
                                 circles_add = circles_add_a[4], circles_remove = circles_remove_a[4],
                                 slits = slits_a[4],
-                                cutouts = cutouts_a[4]);
+                                cutouts = cutouts_a[4],
+                                milling_bit = milling_bit);
         }
     
     if (sides>5)
     {
-        translate([x+thickness,0,thickness]) rotate([0,-90,0]) lasercutoutSquare(thickness=thickness,x=z, y=y, 
+ #       translate([x+thickness,0,thickness]) rotate([0,-90,0]) lasercutoutSquare(thickness=thickness,x=z, y=y, 
                                 simple_tabs = st[3], finger_joints = fj[5],
                                 simple_tab_holes=simple_tab_holes_a[5], captive_nuts=captive_nuts_a[5],
                                 captive_nut_holes = captive_nut_holes_a[5],
