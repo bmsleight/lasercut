@@ -156,21 +156,13 @@ x = 130;
 y = 100;
 lasercutoutSquare(thickness=thickness, x=x, y=y,
     finger_joints=[
-            [UP, 0, 3],
-            [DOWN, 1, 3]
+            [UP, 0, 2],
+            [DOWN, 1, 2]
         ],
         milling_bit=3.125
     );
 
-
-translate([0,y+20,thickness]) rotate([90,0,0]) 
-    lasercutoutSquare(thickness=thickness, x=x, y=y,
-        finger_joints=[
-                [UP, 1, 3],
-                [DOWN, 0, 3]
-            ],
-        milling_bit=3.125
-    );
+translate([0,y+20,thickness]) lasercutoutBox(thickness = thickness, x=x, y=y, z=x/2, sides=5, num_fingers=2, milling_bit=3.125);
 ```
 ![alt tag](https://raw.githubusercontent.com/bmsleight/lasercut/master/readme/example-012.png)
     
