@@ -11,16 +11,17 @@ openscad_bin() {
 
 # Creates a 2d plan of your 3D model
 
-openscad_bin "$1 -D generate=1 -o /tmp/$1.csg" 2>&1 >/dev/null | sed -e 's/ECHO: \"\[LC\] //' -e 's/"$//' -e '$a\
-;' >./2d_$1
+TMPCSG=/tmp/$(basename $1).csg
+TMPSCAD=/tmp/$(basename $1).scad
+
+openscad_bin "$1 -D generate=1 -o $TMPCSG" 2>&1 >/dev/null | sed -e 's/ECHO: \"\[LC\] //' -e 's/"$//' -e '$a\;' >$TMPSCAD
 
 sed -i.tmp '1 i\
-use <lasercut.scad>;\
+// May need to adjust location of <lasercut.scad> \
+use <lasercut.scad>	;\
 \$fn=60;\
 projection(cut = false)\
-' ./2d_$1
-
-rm 2d_$1.tmp
+' $TMPSCAD
 
 # Exports in others formats (could be very long)
 
@@ -28,3 +29,5 @@ rm 2d_$1.tmp
 #openscad_bin "./2d_$1 -o ./2d_$1.dxf"
 #openscad_bin "./2d_$1 -o ./2d_$1.svg"
 #openscad_bin "./$1 -o ./3d_$1.stl"
+
+mv $TMPSCAD $(dirname $1)/$(basename $1)_2d.scad
