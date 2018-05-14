@@ -104,7 +104,8 @@ z = 75;
 for (sides =[4:6])
 {
     color("Gold",0.75) translate([100*(sides-4),0,0]) 
-        lasercutoutBox(thickness = thickness, x=x, y=y, z=z, sides=sides);
+        lasercutoutBox(thickness = thickness, x=x, y=y, z=z, 
+        sides=sides, num_fingers=4);
 }
 
 ```

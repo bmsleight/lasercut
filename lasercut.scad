@@ -118,7 +118,7 @@ module lasercutout(thickness,  points= [],
 
         for (t = [0:1:len(simple_tab_holes)-1]) 
         {
-               simpleTabHole(simple_tab_holes[t][0], simple_tab_holes[t][1], simple_tab_holes[t][2], thickness);
+            simpleTabHole(simple_tab_holes[t][0], simple_tab_holes[t][1], simple_tab_holes[t][2], thickness);
         }
         for (t = [0:1:len(captive_nuts)-1]) 
         {
@@ -176,12 +176,12 @@ module lasercutout(thickness,  points= [],
     
     if (flat_adjust)
     {
-        if ($children) translate([0 + flat_adjust[0], max_y(points) + thickness*3 + flat_adjust[1], 0])
+        if ($children) translate([0 + flat_adjust[0], max_y(points) + thickness*3 + milling_bit*2 + flat_adjust[1], 0])
                 children();
     }
     else
     {
-        if ($children) translate([0, max_y(points) + thickness*2.5, 0])
+        if ($children) translate([0, max_y(points) + thickness*2.5 + milling_bit*2, 0])
                 children();        
     }
 
@@ -379,26 +379,20 @@ module fingers_mill(angle, start_up, fingers, thickness, range_min, range_max, t
     {
         for ( p = [ 0 : 1 : fingers-1] )
 		{
-		
-			kerfSize = (p > 0) ? kerf/2 : kerf/2 ;
-			kerfMove = (p > 0) ? kerf/4 : 0;
-			
-			i=range_min + ((range_max-range_min)/fingers)*p;
             if(start_up == 1) 
             {
-			
-                translate([i-kerfMove,thickness,0]) 
+                translate([((range_max-range_min)/fingers)*p,0,0]) 
                 {
-                    translate([(range_max-range_min)/(fingers*2) + kerfSize + bit/2,0,0]) cylinder(h=thickness*4, d=bit, center=true );
-                    translate([-bit/2,0,0]) cylinder(h=thickness*4, d=bit, center=true);
+                    translate([(range_max-range_min)/(fingers*2) + bit/2,thickness,0]) cylinder(h=thickness*4, d=bit, center=true );
+                    translate([2*(range_max-range_min)/(fingers*2) - bit/2,thickness,0]) cylinder(h=thickness*4, d=bit, center=true );
                 }
             }
             else 
             {
-                translate([i+(range_max-range_min)/(fingers*2)-kerfMove,thickness,0]) 
+                translate([((range_max-range_min)/fingers)*p,0,0]) 
                 {
-                    translate([(range_max-range_min)/(fingers*2) + kerfSize + bit/2,0,0]) cylinder(h=thickness*4, d=bit, center=true);
-                    translate([-bit/2,0,0]) cylinder(h=thickness*4, d=bit, center=true);
+                    translate([bit/2,thickness,0]) cylinder(h=thickness*4, d=bit, center=true );
+                    translate([(range_max-range_min)/(fingers*2) - bit/2,thickness,0]) cylinder(h=thickness*4, d=bit, center=true );
                 }
             }
         }
@@ -558,7 +552,7 @@ module simpleCutouts(x, y, width, height, thickness)
      translate([x,y,0]) rotate([0,0,0]) translate([0,0,-thickness]) cube([width, height, thickness*3]);     
 }
 
-module lasercutoutBox(thickness, x=0, y=0, z=0, sides=6, num_fingers=4,
+module lasercutoutBox(thickness, x=0, y=0, z=0, sides=6, num_fingers=2,
         simple_tab_holes_a=[], 
         captive_nuts_a=[], captive_nut_holes_a=[],
         screw_tab_holes_a=[],
@@ -728,7 +722,7 @@ module lasercutoutBoxAdjustedFJ(thickness, x=0, y=0, z=0, sides=6, fj=[], st=[],
     
     if (sides>5)
     {
- #       translate([x+thickness,0,thickness]) rotate([0,-90,0]) lasercutoutSquare(thickness=thickness,x=z, y=y, 
+        translate([x+thickness,0,thickness]) rotate([0,-90,0]) lasercutoutSquare(thickness=thickness,x=z, y=y, 
                                 simple_tabs = st[3], finger_joints = fj[5],
                                 simple_tab_holes=simple_tab_holes_a[5], captive_nuts=captive_nuts_a[5],
                                 captive_nut_holes = captive_nut_holes_a[5],
