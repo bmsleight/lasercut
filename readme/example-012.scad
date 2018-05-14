@@ -12,6 +12,5 @@ lasercutoutSquare(thickness=thickness, x=x, y=y,
         milling_bit=3.125
     );
 
-
-translate([0,y+20,thickness]) lasercutoutBox(thickness = thickness, x=x, y=y, z=x/2, sides=5, num_fingers=2, milling_bit=3.125);
-
+translate([0,y+20,thickness]) lasercutoutBox(thickness = thickness, x=x, y=y, z=x/2, sides=5, 
+          num_fingers=2, milling_bit=3.125);
