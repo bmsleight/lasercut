@@ -257,11 +257,11 @@ module captiveNutBoltHole(angle, x, y, nut_flat_width, thickness)
     translate([x,y,0]) rotate([0,0,angle-180]) union() 
     {
         translate([-thickness/2,-thickness,-thickness]) cube([thickness, thickness*4, thickness*3]); 
-        echo("screw thread major dia must be < ", thickness);
-        echo("screw thread length must be < ", thickness*5);
+        echo(str("[LC] // screw thread major dia must be < ", thickness));
+        echo(str("[LC] // screw thread length must be < ", thickness*5));
         translate([-nut_flat_width/2,thickness,-thickness]) cube([nut_flat_width, thickness, thickness*3]); 
-        echo("nut thickness must be < ", thickness);
-        echo("nut flats must be < ", nut_flat_width);
+        echo(str("[LC] // nut thickness must be < ", thickness));
+        echo(str("[LC] // nut flats must be < ", nut_flat_width));
     }
 }
 
@@ -491,7 +491,6 @@ module twistConnect(angle, x, y, thickness, max_y, min_y, max_x, min_x)
         translate([x,0,-thickness]) rotate([0,0,angle+90]) union()
         {
             gap = max_y - min_y;
-            echo(gap);
             translate([-gap/2-(thickness*3/2),0,0]) cube([gap, thickness, thickness*3]); 
             translate([+gap/2+(thickness*3/2),0,0]) cube([gap, thickness, thickness*3]); 
         }
