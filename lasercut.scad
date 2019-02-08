@@ -68,9 +68,6 @@ module lasercutout(thickness,  points= [],
         milling_bit = 0.0,
 )
 {
-    path_total = len(points);
-    path = [ for (p = [0 : 1 : path_total]) p ];
-
     function max_y(points) = max([for (a = [0:1:len(points)-1])  points[a][1]]);    
     function min_y(points) = min([for (a = [0:1:len(points)-1])  points[a][1]]);    
     function max_x(points) = max([for (a = [0:1:len(points)-1])  points[a][0]]);    
@@ -85,7 +82,7 @@ module lasercutout(thickness,  points= [],
     { 
         union() 
         {
-            linear_extrude(height = thickness , center = false)  polygon(points=points, paths=path);
+            linear_extrude(height = thickness , center = false)  polygon(points=points);
             for (t = [0:1:len(simple_tabs)-1]) 
             {
                 simpleTab(simple_tabs[t][0], simple_tabs[t][1], simple_tabs[t][2], thickness);
