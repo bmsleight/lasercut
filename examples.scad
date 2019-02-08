@@ -1,6 +1,7 @@
 include <lasercut.scad>; 
 
 thickness = 3.1;
+nut_flat_width = 7;
 x = 100;
 y = 200;
 z =  50;
@@ -15,7 +16,7 @@ module supportLeft()
             [MID, x*.75-thickness/2, height/2]
             ],
         captive_nuts=[
-            [UP, x/2, height] 
+            [UP, x/2, height, nut_flat_width] 
             ],
         twist_holes=[
             [RIGHT, x/2, height/4, height/2]

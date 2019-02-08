@@ -1,9 +1,13 @@
 # Defines where OpenSCAD is installed
 
 openscad_bin() {
-  if [[ "$OSTYPE" == "darwin"* ]]; then
+  if [ -n "$OPENSCAD_BIN" ]
+  then
+    $OPENSCAD_BIN $1
+  elif [[ "$OSTYPE" == "darwin"* ]]
+  then
     /Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD $1
-  else
+  else 
     openscad $1
   fi
 }

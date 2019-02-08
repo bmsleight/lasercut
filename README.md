@@ -58,6 +58,7 @@ Great for holding laser-cut sheets together.
 include <lasercut.scad>; 
 
 thickness = 3.1;
+nut_flat_width = 9.3;
 x = 50;
 y = 100;
 lasercutoutSquare(thickness=thickness, x=x, y=y,
@@ -66,8 +67,8 @@ lasercutoutSquare(thickness=thickness, x=x, y=y,
             [DOWN, x/2, 0]
         ],
     captive_nuts=[
-            [LEFT, 0, y/2],
-            [RIGHT, x, y/2],
+            [LEFT, 0, y/2, nut_flat_width],
+            [RIGHT, x, y/2, nut_flat_width],
             
             ]
 );

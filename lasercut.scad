@@ -122,7 +122,11 @@ module lasercutout(thickness,  points= [],
         }
         for (t = [0:1:len(captive_nuts)-1]) 
         {
-            captiveNutBoltHole(captive_nuts[t][0], captive_nuts[t][1], captive_nuts[t][2], thickness);
+            if (len(captive_nuts) < 4) {
+                captiveNutBoltHole(captive_nuts[t][0], captive_nuts[t][1], captive_nuts[t][2], thickness*3, thickness);
+            } else {
+                captiveNutBoltHole(captive_nuts[t][0], captive_nuts[t][1], captive_nuts[t][2], captive_nuts[t][3], thickness);
+            }
         }
         for (t = [0:1:len(captive_nut_holes)-1]) 
         {
@@ -248,12 +252,16 @@ module simpleTabHole(angle, x, y, thickness)
      }
 }
 
-module captiveNutBoltHole(angle, x, y, thickness)
+module captiveNutBoltHole(angle, x, y, nut_flat_width, thickness)
 {
     translate([x,y,0]) rotate([0,0,angle-180]) union() 
     {
         translate([-thickness/2,-thickness,-thickness]) cube([thickness, thickness*4, thickness*3]); 
-        translate([-thickness/2-thickness,thickness,-thickness]) cube([thickness*3, thickness, thickness*3]); 
+        echo(str("[LC] // screw thread major dia must be < ", thickness));
+        echo(str("[LC] // screw thread length must be < ", thickness*5));
+        translate([-nut_flat_width/2,thickness,-thickness]) cube([nut_flat_width, thickness, thickness*3]); 
+        echo(str("[LC] // nut thickness must be < ", thickness));
+        echo(str("[LC] // nut flats must be < ", nut_flat_width));
     }
 }
 
@@ -483,7 +491,6 @@ module twistConnect(angle, x, y, thickness, max_y, min_y, max_x, min_x)
         translate([x,0,-thickness]) rotate([0,0,angle+90]) union()
         {
             gap = max_y - min_y;
-            echo(gap);
             translate([-gap/2-(thickness*3/2),0,0]) cube([gap, thickness, thickness*3]); 
             translate([+gap/2+(thickness*3/2),0,0]) cube([gap, thickness, thickness*3]); 
         }
