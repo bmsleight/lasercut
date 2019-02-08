@@ -5,7 +5,7 @@ RIGHT = 270;
 MID = 360;
 kerf=0.0;// Hacky global for kerf
 
-generate = $generate == undef ? 0: $generate; 
+generate = 0; 
 
 if (generate == 1)
 {
@@ -85,7 +85,7 @@ module lasercutout(thickness,  points= [],
     { 
         union() 
         {
-            linear_extrude(height = thickness , center = false)  polygon(points=points, path=path);
+            linear_extrude(height = thickness , center = false)  polygon(points=points, paths=path);
             for (t = [0:1:len(simple_tabs)-1]) 
             {
                 simpleTab(simple_tabs[t][0], simple_tabs[t][1], simple_tabs[t][2], thickness);
