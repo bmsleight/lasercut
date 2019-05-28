@@ -18,7 +18,7 @@ openscad_bin() {
 TMPCSG=/tmp/$(basename $1).csg
 TMPSCAD=/tmp/$(basename $1).scad
 
-openscad_bin "$1 -D generate=1 -o $TMPCSG" 2>&1 >/dev/null | sed -e 's/ECHO: \"\[LC\] //' -e 's/"$//' -e '$a\;' >$TMPSCAD
+openscad_bin  "$1 -D generate=1 -o $TMPCSG" 2>&1 >/dev/null | sed -e 's/ECHO: \"\[LC\] //' -e 's/"$//' -e '$a\;' -e  '/WARNING/d'  >$TMPSCAD
 
 sed -i.tmp '1 i\
 // May need to adjust location of <lasercut.scad> \
