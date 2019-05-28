@@ -337,7 +337,7 @@ lasercutoutSquare(thickness=thickness, x=x, y=y,
 ## Complex Example
 Putting these all together - gives a better example - https://github.com/bmsleight/lasercut/blob/master/examples.scad
 
-![alt tag](https://raw.githubusercontent.com/bmsleight/lasercut/master/readme/example-complexf.png)
+![alt tag](https://raw.githubusercontent.com/bmsleight/lasercut/master/readme/example-complex.png)
 
 
 ## Automatically Generate Files Ready for Laser-Cutter
