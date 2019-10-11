@@ -389,6 +389,7 @@ module fingers_mill(angle, start_up, fingers, thickness, range_min, range_max, t
                 translate([((range_max-range_min)/fingers)*p,0,0]) 
                 {
                     translate([(range_max-range_min)/(fingers*2) + bit/2,thickness,0]) cylinder(h=thickness*4, d=bit, center=true );
+                    if (p != fingers-1)
                     translate([2*(range_max-range_min)/(fingers*2) - bit/2,thickness,0]) cylinder(h=thickness*4, d=bit, center=true );
                 }
             }
@@ -396,6 +397,7 @@ module fingers_mill(angle, start_up, fingers, thickness, range_min, range_max, t
             {
                 translate([((range_max-range_min)/fingers)*p,0,0]) 
                 {
+                    if (p != 0)
                     translate([bit/2,thickness,0]) cylinder(h=thickness*4, d=bit, center=true );
                     translate([(range_max-range_min)/(fingers*2) - bit/2,thickness,0]) cylinder(h=thickness*4, d=bit, center=true );
                 }
