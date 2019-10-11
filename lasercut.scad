@@ -376,7 +376,7 @@ module fingers(angle, start_up, fingers, thickness, range_min, range_max, t_x, t
 
 module fingers_mill(angle, start_up, fingers, thickness, range_min, range_max, t_x, t_y, bit=6.35/2)
 {
-
+    delta = bit * (1-sin(45)) / 2;
     // The tweaks to y translate([0, -thickness,0]) ... thickness*2 rather than *1
     // Are to avoid edge cases and make the dxf export better.
     // All fun
@@ -388,9 +388,9 @@ module fingers_mill(angle, start_up, fingers, thickness, range_min, range_max, t
             {
                 translate([((range_max-range_min)/fingers)*p,0,0]) 
                 {
-                    translate([(range_max-range_min)/(fingers*2) + bit/2,thickness,0]) cylinder(h=thickness*4, d=bit, center=true );
+                    translate([(range_max-range_min)/(fingers*2) + bit/2-delta,thickness+bit/2 - delta,0]) cylinder(h=thickness*4, d=bit, center=true , $fn=20);
                     if (p != fingers-1)
-                    translate([2*(range_max-range_min)/(fingers*2) - bit/2,thickness,0]) cylinder(h=thickness*4, d=bit, center=true );
+                    translate([2*(range_max-range_min)/(fingers*2) - bit/2+delta,thickness+bit/2-delta,0]) cylinder(h=thickness*4, d=bit, center=true , $fn=20);
                 }
             }
             else 
@@ -398,8 +398,8 @@ module fingers_mill(angle, start_up, fingers, thickness, range_min, range_max, t
                 translate([((range_max-range_min)/fingers)*p,0,0]) 
                 {
                     if (p != 0)
-                    translate([bit/2,thickness,0]) cylinder(h=thickness*4, d=bit, center=true );
-                    translate([(range_max-range_min)/(fingers*2) - bit/2,thickness,0]) cylinder(h=thickness*4, d=bit, center=true );
+                    translate([bit/2-delta,thickness+bit/2-delta,0]) cylinder(h=thickness*4, d=bit, center=true , $fn=20);
+                    translate([(range_max-range_min)/(fingers*2) - bit/2+delta,thickness+bit/2-delta,0]) cylinder(h=thickness*4, d=bit, center=true , $fn=20);
                 }
             }
         }
