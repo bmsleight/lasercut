@@ -83,41 +83,41 @@ module lasercutout(thickness,  points= [],
         union() 
         {
             linear_extrude(height = thickness , center = false)  polygon(points=points);
-            for (t = [0:1:len(simple_tabs)-1]) 
+            if(simple_tabs != undef) for (t = [0:1:len(simple_tabs)-1]) 
             {
                 simpleTab(simple_tabs[t][0], simple_tabs[t][1], simple_tabs[t][2], thickness);
             }
-            for (t = [0:1:len(captive_nuts)-1]) 
+            if(captive_nuts != undef) for (t = [0:1:len(captive_nuts)-1]) 
             {
                 captiveNutTab(captive_nuts[t][0], captive_nuts[t][1], captive_nuts[t][2], thickness);
             }    
-            for (t = [0:1:len(circles_add)-1]) 
+            if(circles_add != undef) for (t = [0:1:len(circles_add)-1]) 
             {
                 circlesAdd(circles_add[t][0], circles_add[t][1], circles_add[t][2], thickness);
             }    
-            for (t = [0:1:len(finger_joints)-1]) 
+            if(finger_joints != undef) for (t = [0:1:len(finger_joints)-1]) 
             {
                 fingerJoint(finger_joints[t][0], finger_joints[t][1], finger_joints[t][2], thickness, max_y, min_y, max_x, min_x);
             }    
-            for (t = [0:1:len(bumpy_finger_joints)-1]) 
+            if(bumpy_finger_joints != undef) for (t = [0:1:len(bumpy_finger_joints)-1]) 
             {
                 fingerJoint(bumpy_finger_joints[t][0], bumpy_finger_joints[t][1], bumpy_finger_joints[t][2], thickness, max_y, min_y, max_x, min_x, bumps=true);
             }
-            for (t = [0:1:len(screw_tabs)-1]) 
+            if(screw_tabs != undef) for (t = [0:1:len(screw_tabs)-1]) 
             {
                 screwTab(screw_tabs[t][0], screw_tabs[t][1], screw_tabs[t][2], screw_tabs[t][3], thickness);
             }      
-             for (t = [0:1:len(clips)-1]) 
+             if(clips != undef) for (t = [0:1:len(clips)-1]) 
             {
                 clipTab(clips[t][0], clips[t][1], clips[t][2], thickness);
             }  
         } // end union
 
-        for (t = [0:1:len(simple_tab_holes)-1]) 
+        if(simple_tab_holes != undef) for (t = [0:1:len(simple_tab_holes)-1]) 
         {
             simpleTabHole(simple_tab_holes[t][0], simple_tab_holes[t][1], simple_tab_holes[t][2], thickness);
         }
-        for (t = [0:1:len(captive_nuts)-1]) 
+        if(captive_nuts != undef) for (t = [0:1:len(captive_nuts)-1]) 
         {
             if (len(captive_nuts) < 4) {
                 captiveNutBoltHole(captive_nuts[t][0], captive_nuts[t][1], captive_nuts[t][2], thickness*3, thickness);
@@ -125,43 +125,43 @@ module lasercutout(thickness,  points= [],
                 captiveNutBoltHole(captive_nuts[t][0], captive_nuts[t][1], captive_nuts[t][2], captive_nuts[t][3], thickness);
             }
         }
-        for (t = [0:1:len(captive_nut_holes)-1]) 
+        if(captive_nut_holes != undef) for (t = [0:1:len(captive_nut_holes)-1]) 
         {
             captiveNutHole(captive_nut_holes[t][0], captive_nut_holes[t][1], captive_nut_holes[t][2], thickness);
         }    
-        for (t = [0:1:len(twist_holes)-1]) 
+        if(twist_holes != undef) for (t = [0:1:len(twist_holes)-1]) 
         {
             twistHole(twist_holes[t][0], twist_holes[t][1], twist_holes[t][2], twist_holes[t][3], thickness);
         }    
-        for (t = [0:1:len(twist_connect)-1]) 
+        if(twist_connect != undef) for (t = [0:1:len(twist_connect)-1]) 
         {
             twistConnect(twist_connect[t][0], twist_connect[t][1], twist_connect[t][2], thickness, max_y, min_y, max_x, min_x);
         }    
-        for (t = [0:1:len(clips)-1]) 
+        if(clips != undef) for (t = [0:1:len(clips)-1]) 
         {
             clipInner(clips[t][0], clips[t][1], clips[t][2], thickness);
         }    
-        for (t = [0:1:len(clip_holes)-1]) 
+        if(clip_holes != undef) for (t = [0:1:len(clip_holes)-1]) 
         {
             clipHole(clip_holes[t][0], clip_holes[t][1], clip_holes[t][2], thickness);
         }    
-        for (t = [0:1:len(circles_remove)-1]) 
+        if(circles_remove != undef) for (t = [0:1:len(circles_remove)-1]) 
         {
             circlesRemove(circles_remove[t][0], circles_remove[t][1], circles_remove[t][2], thickness);
         }    
-        for (t = [0:1:len(slits)-1]) 
+        if(slits != undef) for (t = [0:1:len(slits)-1]) 
         {
                simpleSlit(slits[t][0], slits[t][1], slits[t][2], slits[t][3], thickness);
         }
-        for (t = [0:1:len(cutouts)-1]) 
+        if(cutouts != undef) for (t = [0:1:len(cutouts)-1]) 
         {
                simpleCutouts(cutouts[t][0], cutouts[t][1], cutouts[t][2], cutouts[t][3], thickness);
         }
-        for (t = [0:1:len(screw_tabs)-1]) 
+        if(screw_tabs != undef) for (t = [0:1:len(screw_tabs)-1]) 
         {
                screwTabHoleForScrew(screw_tabs[t][0], screw_tabs[t][1], screw_tabs[t][2], screw_tabs[t][3], thickness);
         }
-        for (t = [0:1:len(screw_tab_holes)-1]) 
+        if(screw_tab_holes != undef) for (t = [0:1:len(screw_tab_holes)-1]) 
         {
                screwTabHole(screw_tab_holes[t][0], screw_tab_holes[t][1], screw_tab_holes[t][2], screw_tab_holes[t][3], thickness);
         }
@@ -656,6 +656,9 @@ module lasercutoutBox(thickness, x=0, y=0, z=0, sides=6, num_fingers=2,
 module lasercutoutBoxAdjustedFJ(thickness, x=0, y=0, z=0, sides=6, fj=[], st=[],
         simple_tab_holes_a=[], 
         captive_nuts_a=[], captive_nut_holes_a = [],
+        screw_tab_holes_a = [],
+        twist_holes_a = [],
+        clip_holes_a = [],
         circles_add_a = [],
         circles_remove_a = [],
         slits_a = [],
