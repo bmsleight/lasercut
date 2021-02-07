@@ -339,6 +339,13 @@ Putting these all together - gives a better example - https://github.com/bmsleig
 
 ![alt tag](https://raw.githubusercontent.com/bmsleight/lasercut/master/readme/example-complex.png)
 
+## Complex Examples - Box is an array
+The box is made of 4,5 or 6 sides. Each of the sides can have any of slips, tab or cutout circles. 
+
+[More detail on Boxes ](https://github.com/bmsleight/lasercut/tree/master/readme/COMPLEXBOX.md)
+![alt tag](https://raw.githubusercontent.com/bmsleight/lasercut/master/readme/complexboxes.png)
+
+
 
 ## Automatically Generate Files Ready for Laser-Cutter
 
