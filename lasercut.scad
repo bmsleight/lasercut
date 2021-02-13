@@ -245,7 +245,7 @@ module simpleTabHole(angle, x, y, thickness)
      }
      else
      {
-         translate([x,y,0]) rotate([0,0,angle-180]) translate([-thickness/2,-thickness,-thickness]) cube([thickness, screw*2, thickness*3]); 
+         translate([x,y,0]) rotate([0,0,angle-180]) translate([-thickness/2,-thickness,-thickness]) cube([thickness, thickness, thickness*3]); 
      }
 }
 
