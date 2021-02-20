@@ -1,5 +1,27 @@
-# Defines where OpenSCAD is installed
+#!/bin/bash
 
+BOLD=$(tput bold)
+NORMAL=$(tput sgr0)
+
+SOURCE_FILE=$(basename $1)
+NAME=${SOURCE_FILE%.scad}
+CONVERTED_FILE="$NAME-flat.scad"
+DEST_FOLDER="$NAME"
+
+TMPCSG="/tmp/$NAME.csg"
+TMPSCAD="/tmp/$NAME.scad"
+
+if [ $# -lt 1 ] ; then
+	echo "> ${BOLD}Missing argument. No SCAD file given! Example: ./convert-2d.sh example.scad${NORMAL}" 1>&2
+	exit 1
+fi
+
+if [ ! -f "$SOURCE_FILE" ]; then
+	echo "> ${BOLD}The given $SOURCE_FILE does not exist?${NORMAL}" 1>&2
+	exit 1
+fi
+
+# Defines where OpenSCAD is installed
 openscad_bin() {
   if [ -n "$OPENSCAD_BIN" ]
   then
@@ -12,26 +34,51 @@ openscad_bin() {
   fi
 }
 
+makeFlat(){
+	# Create a 2d plan of your 3D model
+	echo "> generate ${BOLD}2d flat scad file${NORMAL}"
 
-# Creates a 2d plan of your 3D model
+	openscad_bin  "$SOURCE_FILE -D generate=1 -o $TMPCSG" 2>&1 >/dev/null | sed -e 's/ECHO: \"\[LC\] //' -e 's/"$//' -e '$a\
+	;' -e  '/WARNING/d'  >$TMPSCAD
 
-TMPCSG=/tmp/$(basename $1).csg
-TMPSCAD=/tmp/$(basename $1).scad
+	echo "use <lasercut.scad>;
+	\$fn=60;
+	module flat(){
+	projection(cut = false)
+	" > $CONVERTED_FILE
 
-openscad_bin  "$1 -D generate=1 -o $TMPCSG" 2>&1 >/dev/null | sed -e 's/ECHO: \"\[LC\] //' -e 's/"$//' -e '$a\;' -e  '/WARNING/d'  >$TMPSCAD
+	cat $TMPSCAD >> $CONVERTED_FILE
 
-sed -i.tmp '1 i\
-// May need to adjust location of <lasercut.scad> \
-use <lasercut.scad>	;\
-\$fn=60;\
-projection(cut = false)\
-' $TMPSCAD
+	echo "
+	}
+
+	// uncomment if you need an extruded version for e.g. 3d printing, cnc milling
+	//linear_extrude(height=YOUR_HEIGHT_VALUE)
+	flat();" >> $CONVERTED_FILE
+}
+
+makeFlat
+
 
 # Exports in others formats (could be very long)
+if [ ! -d "$DEST_FOLDER" ]; then
+	echo "> create folder ${BOLD}${NAME}${NORMAL}";
+	mkdir -p "$DEST_FOLDER"
+fi
 
-#openscad_bin "./2d_$1 -o ./2d_$1.csg"
-#openscad_bin "./2d_$1 -o ./2d_$1.dxf"
-#openscad_bin "./2d_$1 -o ./2d_$1.svg"
-#openscad_bin "./$1 -o ./3d_$1.stl"
+echo "> save ${BOLD}csg file${NORMAL}";
+openscad_bin "./$CONVERTED_FILE -o ./$DEST_FOLDER/$NAME.csg -q"
 
-mv $TMPSCAD $(dirname $1)/$(basename $1)_2d.scad
+echo "> save ${BOLD}dxf file${NORMAL}";
+openscad_bin "./$CONVERTED_FILE -o ./$DEST_FOLDER/$NAME.dxf -q"
+
+echo "> save ${BOLD}svg file${NORMAL}";
+openscad_bin "./$CONVERTED_FILE -o ./$DEST_FOLDER/$NAME.svg -q"
+
+echo "> save ${BOLD}3d stl file${NORMAL}";
+openscad_bin "./$SOURCE_FILE -D foo=1 -o ./$DEST_FOLDER/$NAME.stl -q"
+
+#echo "> save ${BOLD}3d stl flat file${NORMAL}";
+#openscad_bin "./$CONVERTED_FILE -o ./$DEST_FOLDER/$NAME-3d-flat.stl"
+
+echo "> ${BOLD}done!${NORMAL}";
