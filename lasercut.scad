@@ -27,6 +27,7 @@ module lasercutoutSquare(thickness, x=0, y=0,
         circles_remove = [],
         slits = [],
         cutouts = [],
+        cutouts_vb = [],
         flat_adjust = [],
         milling_bit = 0.0,
 )
@@ -47,6 +48,7 @@ lasercutout(thickness=thickness,
         circles_remove = circles_remove,
         slits = slits,
         cutouts = cutouts,
+        cutouts_vb = cutouts_vb,
         flat_adjust = flat_adjust,
         milling_bit = milling_bit
     );
@@ -64,6 +66,7 @@ module lasercutout(thickness,  points= [],
         circles_remove = [],
         slits = [],
         cutouts = [],
+        cutouts_vb = [],
         flat_adjust = [],
         milling_bit = 0.0,
 )
@@ -157,6 +160,10 @@ module lasercutout(thickness,  points= [],
         {
                simpleCutouts(cutouts[t][0], cutouts[t][1], cutouts[t][2], cutouts[t][3], thickness);
         }
+        if(cutouts_vb != undef) for (t = [0:1:len(cutouts_vb)-1]) 
+        {
+               simpleCutouts(cutouts_vb[t][0], cutouts_vb[t][1], cutouts_vb[t][2], cutouts_vb[t][3], thickness);
+        }
         if(screw_tabs != undef) for (t = [0:1:len(screw_tabs)-1]) 
         {
                screwTabHoleForScrew(screw_tabs[t][0], screw_tabs[t][1], screw_tabs[t][2], screw_tabs[t][3], thickness);
@@ -221,6 +228,8 @@ module lasercutout(thickness,  points= [],
             echo(str("[LC]         , slits = ", slits));
         if(cutouts)
             echo(str("[LC]         , cutouts = ", cutouts));
+        if(cutouts_vb)
+            echo(str("[LC]         , cutouts_vb = ", cutouts_vb));
         if(flat_adjust)
             echo(str("[LC]         , flat_adjust = ", flat_adjust));
         if(milling_bit>0)
@@ -741,4 +750,161 @@ module lasercutoutBoxAdjustedFJ(thickness, x=0, y=0, z=0, sides=6, fj=[], st=[],
                                 cutouts = cutouts_a[5],
                                 milling_bit = milling_bit);
     }
+}
+
+module lasercutoutVinylBox(thickness, x=0, y=0, z=0, sides=6, num_fingers=2, overlapfactor=20,
+        simple_tab_holes_a=[], 
+        captive_nuts_a=[], captive_nut_holes_a=[],
+        screw_tab_holes_a=[],
+        twist_holes_a=[],
+        clip_holes_a=[],
+        circles_add_a=[],
+        circles_remove_a=[],
+        slits_a = [],
+        cutouts_a = [],
+        milling_bit = 0.0
+)
+{
+    overlap=(1+overlapfactor)*thickness;
+    
+    if (sides>3)
+    {
+        cutouts_1_2= [ 
+            [x*1/5, overlap, x/5, thickness],
+            [x*1/5, y-overlap-thickness, x/5, thickness],
+            [x*3/5, overlap, x/5, thickness],
+            [x*3/5, y-overlap-thickness, x/5, thickness],
+            [overlap, y/3, thickness, y/3],
+            [x-overlap, y/3, thickness, y/3]   
+        ];
+    
+        // Base side 1
+        translate([0,0,overlap]) lasercutoutSquare(thickness=thickness,
+                x=x, y=y,
+                cutouts_vb=cutouts_1_2,
+                simple_tab_holes=simple_tab_holes_a[0], captive_nuts=captive_nuts_a[0],
+                captive_nut_holes = captive_nut_holes_a[0],
+                screw_tab_holes = screw_tab_holes_a[0],
+                twist_holes = twist_holes_a[0],
+                clip_holes = clip_holes_a[0],
+                circles_add = circles_add_a[0], circles_remove = circles_remove_a[0],
+                slits = slits_a[0],
+                cutouts = cutouts_a[0],
+                milling_bit = milling_bit
+                );    
+    
+        translate([0,y,z-overlap]) rotate([180,0,0]) lasercutoutSquare(thickness=thickness,
+                x=x, y=y,
+                cutouts_vb=cutouts_1_2,
+                simple_tab_holes=simple_tab_holes_a[1], captive_nuts=captive_nuts_a[1],
+                captive_nut_holes = captive_nut_holes_a[1],
+                screw_tab_holes = screw_tab_holes_a[1],
+                twist_holes = twist_holes_a[1],
+                clip_holes = clip_holes_a[1],
+                circles_add = circles_add_a[1], circles_remove = circles_remove_a[1],
+                slits = slits_a[1],
+                cutouts = cutouts_a[1],
+                milling_bit = milling_bit
+                );    
+    
+        cutouts_3_4= [ 
+            [overlap, z/3, thickness, z/3],
+            [x-overlap, z/3, thickness, z/3]
+        ];
+    
+        points = [
+            [0,overlap+thickness], [x*1/5,overlap+thickness], 
+            [x*1/5,0], [x*2/5,0], 
+            [x*2/5, overlap+thickness], [x*3/5,overlap+thickness],
+            [x*3/5,0], [x*4/5,0],
+            [x*4/5,overlap+thickness], [x*5/5,overlap+thickness],
+            [x*5/5,z-overlap-thickness], [x*4/5,z-overlap-thickness],
+            [x*4/5,z], [x*3/5,z],
+            [x*3/5,z-overlap-thickness], [x*2/5,z-overlap-thickness],
+            [x*2/5,z], [x*1/5,z],
+            [x*1/5,z-overlap-thickness], [0,z-overlap-thickness],
+            [0,z]];
+        
+       translate([0,thickness+overlap,0]) rotate([90,0,0])  lasercutout(thickness=thickness,
+                points=points,
+                cutouts_vb=cutouts_3_4,
+                simple_tab_holes=simple_tab_holes_a[2], captive_nuts=captive_nuts_a[2],
+                captive_nut_holes = captive_nut_holes_a[2],
+                screw_tab_holes = screw_tab_holes_a[2],
+                twist_holes = twist_holes_a[2],
+                clip_holes = clip_holes_a[2],
+                circles_add = circles_add_a[2], circles_remove = circles_remove_a[2],
+                slits = slits_a[2],
+                cutouts = cutouts_a[2],
+                milling_bit = milling_bit
+                );    
+                
+       translate([0,y-overlap-thickness,z]) rotate([270,0,0])  lasercutout(thickness=thickness,
+                points=points,
+                cutouts_vb=cutouts_3_4,
+                simple_tab_holes=simple_tab_holes_a[3], captive_nuts=captive_nuts_a[3],
+                captive_nut_holes = captive_nut_holes_a[3],
+                screw_tab_holes = screw_tab_holes_a[3],
+                twist_holes = twist_holes_a[3],
+                clip_holes = clip_holes_a[3],
+                circles_add = circles_add_a[3], circles_remove = circles_remove_a[3],
+                slits = slits_a[3],
+                cutouts = cutouts_a[3],
+                milling_bit = milling_bit
+                );    
+    }
+    points_end = [
+         [overlap+thickness,overlap+thickness], 
+         [overlap+thickness,y*1/3], 
+         [0,y*1/3], [0,y*2/3],
+         [overlap+thickness,y*2/3], 
+         [overlap+thickness,y-overlap-thickness], 
+         [z*1/3,y-overlap-thickness], 
+         [z*1/3,y], 
+         [z*2/3,y], 
+         [z*2/3,y-overlap-thickness], 
+         [z-overlap-thickness,y-overlap-thickness], 
+         [z-overlap-thickness,y*2/3], 
+         [z,y*2/3], 
+         [z,y*1/3], 
+         [z-overlap-thickness,y*1/3], 
+         [z-overlap-thickness,overlap+thickness], 
+         [z*2/3,overlap+thickness], 
+         [z*2/3,0], 
+         [z*1/3,0], 
+         [z*1/3,overlap+thickness],     
+         ];
+
+    if (sides>4)
+    {
+        translate([overlap,0,z]) rotate([0,90,0]) lasercutout(thickness=thickness,
+                points=points_end,
+                simple_tab_holes=simple_tab_holes_a[4], captive_nuts=captive_nuts_a[4],
+                captive_nut_holes = captive_nut_holes_a[4],
+                screw_tab_holes = screw_tab_holes_a[4],
+                twist_holes = twist_holes_a[4],
+                clip_holes = clip_holes_a[4],
+                circles_add = circles_add_a[4], circles_remove = circles_remove_a[4],
+                slits = slits_a[4],
+                cutouts = cutouts_a[4],
+                milling_bit = milling_bit
+                );    
+    }
+
+    if (sides>5)
+    {    
+    translate([x-overlap+thickness,0,0]) rotate([0,270,0]) lasercutout(thickness=thickness,
+            points=points_end,
+                simple_tab_holes=simple_tab_holes_a[5], captive_nuts=captive_nuts_a[5],
+                captive_nut_holes = captive_nut_holes_a[5],
+                screw_tab_holes = screw_tab_holes_a[5],
+                twist_holes = twist_holes_a[5],
+                clip_holes = clip_holes_a[5],
+                circles_add = circles_add_a[5], circles_remove = circles_remove_a[5],
+                slits = slits_a[5],
+                cutouts = cutouts_a[5],
+                milling_bit = milling_bit
+            );    
+    }
+
 }
