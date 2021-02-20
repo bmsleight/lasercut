@@ -112,6 +112,19 @@ for (sides =[4:6])
 ```
 ![alt tag](https://raw.githubusercontent.com/bmsleight/lasercut/master/readme/example-005.png)
 
+
+##  Box for Vinyl Cutters
+
+Easy to make a box with four, five or six side. Uses finger joints with the correct alignment to give a flat edge regardless of number of sides.
+
+```
+include <lasercut.scad>; 
+
+rotate([0,270,0]) lasercutoutVinylBox(x=80, y=60, z=50, thickness=0.2);
+```
+![alt tag](https://raw.githubusercontent.com/bmsleight/lasercut/master/readme/example-014.png.png)
+
+
 ##  Finger Joints
 
 Simple finger joints, (as automatically used in the box above). Parameters are direction, startup tap, even number) so for example [UP, 1, 4] - UP direction, starting with a tab not a gap, four figners. 
@@ -372,3 +385,12 @@ See [2d_examples_tweak.scad](https://github.com/bmsleight/lasercut/blob/master/2
 Which give an arrangement and can be exported to a new dxf file.
 ![alt tag](https://raw.githubusercontent.com/bmsleight/lasercut/master/readme/example-complex-2d-part-tweak-dxf.png)
 
+## No Laser-Cutter, use Vinyl Cutter
+
+```
+include <lasercut.scad>; 
+
+rotate([0,270,0]) lasercutoutVinylBox(x=80, y=60, z=50, thickness=0.2);
+```
+
+![alt tag](https://raw.githubusercontent.com/bmsleight/lasercut/master/readme/vinylexample.jpg)
