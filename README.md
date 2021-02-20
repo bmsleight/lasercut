@@ -122,7 +122,7 @@ include <lasercut.scad>;
 
 rotate([0,270,0]) lasercutoutVinylBox(x=80, y=60, z=50, thickness=0.2);
 ```
-![alt tag](https://raw.githubusercontent.com/bmsleight/lasercut/master/readme/example-014.png.png)
+![alt tag](https://raw.githubusercontent.com/bmsleight/lasercut/master/readme/example-014.png)
 
 
 ##  Finger Joints
