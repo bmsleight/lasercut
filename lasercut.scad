@@ -23,7 +23,6 @@ module lasercutoutSquare(thickness, x=0, y=0,
         screw_tabs=[], screw_tab_holes=[],
         twist_holes=[], twist_connect=[],
         clips=[], clip_holes=[],
-        tslots=[], tslot_holes=[], 
         circles_add = [],
         circles_remove = [],
         slits = [],
@@ -44,7 +43,6 @@ lasercutout(thickness=thickness,
         screw_tabs= screw_tabs, screw_tab_holes= screw_tab_holes,
         twist_holes=twist_holes, twist_connect=twist_connect,
         clips=clips, clip_holes=clip_holes,
-        tslots=tslots, tslot_holes=tslot_holes,
         circles_add = circles_add,
         circles_remove = circles_remove,
         slits = slits,
@@ -62,7 +60,6 @@ module lasercutout(thickness,  points= [],
         screw_tabs=[], screw_tab_holes=[],
         twist_holes=[], twist_connect=[],
         clips=[], clip_holes=[],
-        tslots=[], tslot_holes=[],
         circles_add = [],
         circles_remove = [],
         slits = [],
@@ -114,10 +111,6 @@ module lasercutout(thickness,  points= [],
             {
                 clipTab(clips[t][0], clips[t][1], clips[t][2], thickness);
             }  
-             if(tslots != undef) for (t = [0:1:len(tslots)-1]) 
-            {
-                tslot(tslots[t][0], tslots[t][1], tslots[t][2], thickness);
-            }  
         } // end union
 
         if(simple_tab_holes != undef) for (t = [0:1:len(simple_tab_holes)-1]) 
@@ -152,10 +145,6 @@ module lasercutout(thickness,  points= [],
         {
             clipHole(clip_holes[t][0], clip_holes[t][1], clip_holes[t][2], thickness);
         }    
-        if(tslot_holes != undef) for (t = [0:1:len(tslot_holes)-1]) 
-        {
-            tslotHoles(tslot_holes[t][0], tslot_holes[t][1], tslot_holes[t][2], thickness);
-        }
         if(circles_remove != undef) for (t = [0:1:len(circles_remove)-1]) 
         {
             circlesRemove(circles_remove[t][0], circles_remove[t][1], circles_remove[t][2], thickness);
@@ -224,10 +213,6 @@ module lasercutout(thickness,  points= [],
             echo(str("[LC]         , clips = ", clips));
         if(clip_holes)
             echo(str("[LC]         , clip_holes = ", clip_holes));
-        if(tslots)
-            echo(str("[LC]         , tslots = ", tslots));
-        if(tslot_holes)
-            echo(str("[LC]         , tslot_holes = ", tslot_holes));
         if(circles_add)
             echo(str("[LC]         , circles_add = ", circles_add));
         if(circles_remove)
@@ -263,20 +248,6 @@ module simpleTabHole(angle, x, y, thickness)
          translate([x,y,0]) rotate([0,0,angle-180]) translate([-thickness/2,-thickness,-thickness]) cube([thickness, thickness, thickness*3]); 
      }
 }
-
-module tslotHoles(angle, x, y, thickness)
-{
-     // Special case does not go past edge - so make only 1 thickness y
-     if (angle == 360)
-     {
-         translate([x-thickness*2,y-thickness,0]) rotate([0,0,0]) translate([0-thickness,0+thickness*2,-thickness]) cube([thickness*3, thickness, thickness*3]); 
-     }
-     else
-     {
-         translate([x,y,0]) rotate([0,0,angle-180]) translate([-thickness/2-thickness,-thickness+thickness*2,-thickness]) cube([thickness*3, thickness, thickness*3]); 
-     }
-}
-
 
 module captiveNutBoltHole(angle, x, y, nut_flat_width, thickness)
 {
@@ -366,15 +337,15 @@ module fingers(angle, start_up, fingers, thickness, range_min, range_max, t_x, t
     translate([t_x, t_y,0]) rotate([0,0,angle]) translate([0, -thickness,0])
     {
         for ( p = [ 0 : 1 : fingers-1] )
-        {
-        
-            kerfSize = (p > 0) ? kerf/2 : kerf/2 ;
-            kerfMove = (p > 0) ? kerf/4 : 0;
-            
-            i=range_min + ((range_max-range_min)/fingers)*p;
+		{
+		
+			kerfSize = (p > 0) ? kerf/2 : kerf/2 ;
+			kerfMove = (p > 0) ? kerf/4 : 0;
+			
+			i=range_min + ((range_max-range_min)/fingers)*p;
             if(start_up == 1) 
             {
-            
+			
                 translate([i-kerfMove,0,0]) 
                 {
                     cube([ (range_max-range_min)/(fingers*2) + kerfSize, thickness*2, thickness]);
@@ -412,7 +383,7 @@ module fingers_mill(angle, start_up, fingers, thickness, range_min, range_max, t
     translate([t_x, t_y,0]) rotate([0,0,angle]) translate([0, -thickness,0])
     {
         for ( p = [ 0 : 1 : fingers-1] )
-        {
+		{
             if(start_up == 1) 
             {
                 translate([((range_max-range_min)/fingers)*p,0,0]) 
@@ -563,22 +534,6 @@ module clipHole(angle, x, y, thickness)
         translate([0,-thickness/2,thickness/2]) cube([thickness*2+1,thickness,thickness*3], center=true);
     }
 }
-
-//                tslot(tslots[t][0], tslots[t][1], tslots[t][2], thickness);
-module tslot(angle, x, y, thickness)
-{
-    translate([x,y,0]) rotate([0,0,angle]) translate([-thickness*3/2,0,0]) 
-    union ()
-    {    
-        difference ()
-        {
-			cube([thickness*3, thickness*3, thickness]); 
-			translate([thickness, thickness, -thickness]) cube([thickness, thickness, thickness*3]); 
-		}
-    }
-}
-
-
 
 module circlesAdd(radius, x, y, thickness)
 {
