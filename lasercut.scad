@@ -134,11 +134,25 @@ module lasercutout(thickness,  points= [],
         }    
         if(twist_holes != undef) for (t = [0:1:len(twist_holes)-1]) 
         {
-            twistHole(twist_holes[t][0], twist_holes[t][1], twist_holes[t][2], twist_holes[t][3], thickness);
+            if(twist_holes[t][4] != undef) 
+            {
+                twistHole(twist_holes[t][0], twist_holes[t][1], twist_holes[t][2], twist_holes[t][3], thickness, spine=twist_holes[t][4]);
+            }
+            else
+            {
+                twistHole(twist_holes[t][0], twist_holes[t][1], twist_holes[t][2], twist_holes[t][3], thickness, spine=3*thickness);
+            }
         }    
         if(twist_connect != undef) for (t = [0:1:len(twist_connect)-1]) 
         {
-            twistConnect(twist_connect[t][0], twist_connect[t][1], twist_connect[t][2], thickness, max_y, min_y, max_x, min_x);
+            if(twist_connect[t][3] != undef) 
+            {
+                twistConnect(twist_connect[t][0], twist_connect[t][1], twist_connect[t][2], thickness, max_y, min_y, max_x, min_x, spine=twist_connect[t][3]);
+            }
+            else
+            {
+                twistConnect(twist_connect[t][0], twist_connect[t][1], twist_connect[t][2], thickness, max_y, min_y, max_x, min_x, spine=thickness*3);
+            }
         }    
         if(clips != undef) for (t = [0:1:len(clips)-1]) 
         {
@@ -460,7 +474,7 @@ module captiveNutHole(angle, x, y, thickness)
     }
 }
 
-module twistHole(angle, x, y, width, thickness)
+module twistHole(angle, x, y, width, thickness, spine)
 {
 // http://msraynsford.blogspot.co.uk/2012/06/panel-joinery-10.html
     translate([x,y,0]) rotate([0,0,angle-90]) union()
@@ -469,18 +483,18 @@ module twistHole(angle, x, y, width, thickness)
         difference()
         {
             // Need some trig,  radius is hypo of triangle
-            // Other sides are thinkness/2 and thinkness*3
+            // Other sides are thinkness/2 and spine
             // 
             // 
-           radius = sqrt(  ((thickness/2)*(thickness/2)) + (thickness*1.5*thickness*1.5) ); 
+           radius = sqrt(  ((thickness/2)*(thickness/2)) + ((spine/2)*(spine/2)) ); 
            translate([0,0, -thickness]) cylinder(h=thickness*3, r=radius);
-           translate([-thickness*3/2,thickness,0]) cube([thickness*2, thickness, thickness*3], center=true); 
-           translate([thickness*3/2,-thickness,0]) cube([thickness*2, thickness, thickness*3], center=true); 
+           translate([-thickness/2-spine/4,spine/4,0]) cube([(spine/2), (spine/2), thickness*3], center=true); 
+           translate([+thickness/2+spine/4,-spine/4,0]) cube([(spine/2), (spine/2), thickness*3], center=true); 
         }
     }
 }
 
-module twistConnect(angle, x, y, thickness, max_y, min_y, max_x, min_x)
+module twistConnect(angle, x, y, thickness, max_y, min_y, max_x, min_x, spine)
 {
     // Really should do trianometry for non-90 Angles, but hey ho
     if( (angle == LEFT) || (angle == RIGHT) )
@@ -488,17 +502,17 @@ module twistConnect(angle, x, y, thickness, max_y, min_y, max_x, min_x)
         translate([0,y,-thickness]) rotate([0,0,angle+90]) union()
         {
             gap = max_x - min_x;
-            translate([-gap/2-(thickness*3/2),0,0]) cube([gap, thickness, thickness*3]); 
-            translate([+gap/2+(thickness*3/2),0,0]) cube([gap, thickness, thickness*3]); 
+            translate([-gap/2-(spine/2),0,0]) cube([gap, thickness, thickness*3]); 
+            translate([+gap/2+(spine/2),0,0]) cube([gap, thickness, thickness*3]); 
         }
     }
     if( (angle == UP) || (angle == DOWN) )
     {
-        translate([x,0,-thickness]) rotate([0,0,angle+90]) union()
+#        translate([x,0,-thickness]) rotate([0,0,angle+90]) union()
         {
             gap = max_y - min_y;
-            translate([-gap/2-(thickness*3/2),0,0]) cube([gap, thickness, thickness*3]); 
-            translate([+gap/2+(thickness*3/2),0,0]) cube([gap, thickness, thickness*3]); 
+            translate([-gap/2-(spine/2),0,0]) cube([gap, thickness, thickness*3]); 
+            translate([+gap/2+(spine/2),0,0]) cube([gap, thickness, thickness*3]); 
         }
     }
 }
