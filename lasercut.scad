@@ -203,8 +203,16 @@ module lasercutout(thickness,  points= [],
     }
     else
     {
-        if ($children) translate([0, max_y(points) + thickness*2.5 + milling_bit*2, 0])
-                children();        
+        if ((thickness*2.5 + milling_bit*2) > 5)
+        {
+            if ($children) translate([0, max_y(points) + thickness*2.5 + milling_bit*2, 0])
+                    children();        
+        }
+        else
+        {
+            if ($children) translate([0, max_y(points) + 5, 0])
+                    children();                
+        }
     }
 
     if (generate == 1)
