@@ -516,7 +516,7 @@ module twistConnect(angle, x, y, thickness, max_y, min_y, max_x, min_x, spine)
     }
     if( (angle == UP) || (angle == DOWN) )
     {
-#        translate([x,0,-thickness]) rotate([0,0,angle+90]) union()
+        translate([x,0,-thickness]) rotate([0,0,angle+90]) union()
         {
             gap = max_y - min_y;
             translate([-gap/2-(spine/2),0,0]) cube([gap, thickness, thickness*3]); 
@@ -774,7 +774,7 @@ module lasercutoutBoxAdjustedFJ(thickness, x=0, y=0, z=0, sides=6, fj=[], st=[],
     }
 }
 
-module lasercutoutVinylBox(thickness, x=0, y=0, z=0, sides=6, num_fingers=2, overlapfactor=20,
+module lasercutoutVinylBox(thickness, x=0, y=0, z=0, sides=6, overlapdistance=-1,
         simple_tab_holes_a=[], 
         captive_nuts_a=[], captive_nut_holes_a=[],
         screw_tab_holes_a=[],
@@ -787,23 +787,63 @@ module lasercutoutVinylBox(thickness, x=0, y=0, z=0, sides=6, num_fingers=2, ove
         milling_bit = 0.0
 )
 {
-    overlap=(1+overlapfactor)*thickness;
-    
-    if (sides>3)
-    {
-        cutouts_1_2= [ 
-            [x*1/5, overlap, x/5, thickness],
-            [x*1/5, y-overlap-thickness, x/5, thickness],
-            [x*3/5, overlap, x/5, thickness],
-            [x*3/5, y-overlap-thickness, x/5, thickness],
+    overlap = (overlapdistance == -1) ? (1+10)*thickness : overlapdistance;
+
+    cutouts_3_4 = [ 
+            [x*1/3, overlap, x/3, thickness],
+            [x*1/3, z-overlap-thickness, x/3, thickness],
+            [overlap, z/3, thickness, z/3],
+            [x-overlap-thickness, z/3, thickness, z/3]   
+        ];
+ 
+    cutouts_5_6= [ 
             [overlap, y/3, thickness, y/3],
-            [x-overlap, y/3, thickness, y/3]   
+            [x-overlap-thickness, y/3, thickness, y/3]
         ];
     
-        // Base side 1
-        translate([0,0,overlap]) lasercutoutSquare(thickness=thickness,
-                x=x, y=y,
-                cutouts_vb=cutouts_1_2,
+    
+    points_1_2 = [
+         [overlap+thickness,overlap+thickness], 
+         [overlap+thickness,y*1/3], 
+         [0,y*1/3], [0,y*2/3],
+         [overlap+thickness,y*2/3], 
+         [overlap+thickness,y-overlap-thickness], 
+         [x*1/3,y-overlap-thickness], 
+         [x*1/3,y], 
+         [x*2/3,y], 
+         [x*2/3,y-overlap-thickness], 
+         [x-overlap-thickness,y-overlap-thickness], 
+         [x-overlap-thickness,y*2/3], 
+         [x,y*2/3], 
+         [x,y*1/3], 
+         [x-overlap-thickness,y*1/3], 
+         [x-overlap-thickness,overlap+thickness], 
+         [x*2/3,overlap+thickness], 
+         [x*2/3,0], 
+         [x*1/3,0], 
+         [x*1/3,overlap+thickness],     
+         ];
+
+        points_5_6 = [
+            [0,overlap+thickness], 
+            [z/3,overlap+thickness], 
+            [z/3,0], 
+            [z*2/3,0], 
+            [z*2/3,overlap+thickness], 
+            [z*3/3,overlap+thickness], 
+            [z*3/3,y-(overlap+thickness)], 
+            [z*2/3,y-(overlap+thickness)], 
+            [z*2/3,y], 
+            [z*1/3,y], 
+            [z*1/3,y-(overlap+thickness)], 
+            [0,y-(overlap+thickness)]
+            ];
+
+   if (sides>0)
+   {
+        // side 1
+        translate([0,0,overlap]) rotate([0,0,0]) lasercutout(thickness=thickness,
+                points=points_1_2,
                 simple_tab_holes=simple_tab_holes_a[0], captive_nuts=captive_nuts_a[0],
                 captive_nut_holes = captive_nut_holes_a[0],
                 screw_tab_holes = screw_tab_holes_a[0],
@@ -814,10 +854,12 @@ module lasercutoutVinylBox(thickness, x=0, y=0, z=0, sides=6, num_fingers=2, ove
                 cutouts = cutouts_a[0],
                 milling_bit = milling_bit
                 );    
-    
-        translate([0,y,z-overlap]) rotate([180,0,0]) lasercutoutSquare(thickness=thickness,
-                x=x, y=y,
-                cutouts_vb=cutouts_1_2,
+    }
+   if (sides>1)
+   {
+        // side 2
+        translate([x,0,z-overlap]) rotate([0,180,0]) lasercutout(thickness=thickness,
+                points=points_1_2,
                 simple_tab_holes=simple_tab_holes_a[1], captive_nuts=captive_nuts_a[1],
                 captive_nut_holes = captive_nut_holes_a[1],
                 screw_tab_holes = screw_tab_holes_a[1],
@@ -828,27 +870,13 @@ module lasercutoutVinylBox(thickness, x=0, y=0, z=0, sides=6, num_fingers=2, ove
                 cutouts = cutouts_a[1],
                 milling_bit = milling_bit
                 );    
-    
-        cutouts_3_4= [ 
-            [overlap, z/3, thickness, z/3],
-            [x-overlap, z/3, thickness, z/3]
-        ];
-    
-        points = [
-            [0,overlap+thickness], [x*1/5,overlap+thickness], 
-            [x*1/5,0], [x*2/5,0], 
-            [x*2/5, overlap+thickness], [x*3/5,overlap+thickness],
-            [x*3/5,0], [x*4/5,0],
-            [x*4/5,overlap+thickness], [x*5/5,overlap+thickness],
-            [x*5/5,z-overlap-thickness], [x*4/5,z-overlap-thickness],
-            [x*4/5,z], [x*3/5,z],
-            [x*3/5,z-overlap-thickness], [x*2/5,z-overlap-thickness],
-            [x*2/5,z], [x*1/5,z],
-            [x*1/5,z-overlap-thickness], [0,z-overlap-thickness],
-            [0,z]];
-        
-       translate([0,thickness+overlap,0]) rotate([90,0,0])  lasercutout(thickness=thickness,
-                points=points,
+    }
+
+    if (sides>2)
+    {
+        // side 3
+        translate([0,overlap,z]) rotate([270,0,0])  lasercutoutSquare(thickness=thickness,
+                x=x, y=z,
                 cutouts_vb=cutouts_3_4,
                 simple_tab_holes=simple_tab_holes_a[2], captive_nuts=captive_nuts_a[2],
                 captive_nut_holes = captive_nut_holes_a[2],
@@ -859,10 +887,14 @@ module lasercutoutVinylBox(thickness, x=0, y=0, z=0, sides=6, num_fingers=2, ove
                 slits = slits_a[2],
                 cutouts = cutouts_a[2],
                 milling_bit = milling_bit
-                );    
-                
-       translate([0,y-overlap-thickness,z]) rotate([270,0,0])  lasercutout(thickness=thickness,
-                points=points,
+                );        
+    }
+    
+    if (sides>3)
+    {
+        // side 4
+        translate([0,y-thickness-overlap,z]) rotate([270,0,0])  lasercutoutSquare(thickness=thickness,
+                x=x, y=z,
                 cutouts_vb=cutouts_3_4,
                 simple_tab_holes=simple_tab_holes_a[3], captive_nuts=captive_nuts_a[3],
                 captive_nut_holes = captive_nut_holes_a[3],
@@ -873,34 +905,14 @@ module lasercutoutVinylBox(thickness, x=0, y=0, z=0, sides=6, num_fingers=2, ove
                 slits = slits_a[3],
                 cutouts = cutouts_a[3],
                 milling_bit = milling_bit
-                );    
+                );        
     }
-    points_end = [
-         [overlap+thickness,overlap+thickness], 
-         [overlap+thickness,y*1/3], 
-         [0,y*1/3], [0,y*2/3],
-         [overlap+thickness,y*2/3], 
-         [overlap+thickness,y-overlap-thickness], 
-         [z*1/3,y-overlap-thickness], 
-         [z*1/3,y], 
-         [z*2/3,y], 
-         [z*2/3,y-overlap-thickness], 
-         [z-overlap-thickness,y-overlap-thickness], 
-         [z-overlap-thickness,y*2/3], 
-         [z,y*2/3], 
-         [z,y*1/3], 
-         [z-overlap-thickness,y*1/3], 
-         [z-overlap-thickness,overlap+thickness], 
-         [z*2/3,overlap+thickness], 
-         [z*2/3,0], 
-         [z*1/3,0], 
-         [z*1/3,overlap+thickness],     
-         ];
-
     if (sides>4)
     {
-        translate([overlap,0,z]) rotate([0,90,0]) lasercutout(thickness=thickness,
-                points=points_end,
+        // Side 5
+       translate([overlap,0,z]) rotate([0,90,0])  lasercutout(thickness=thickness,
+                points=points_5_6,
+                cutouts_vb=cutouts_5_6,
                 simple_tab_holes=simple_tab_holes_a[4], captive_nuts=captive_nuts_a[4],
                 captive_nut_holes = captive_nut_holes_a[4],
                 screw_tab_holes = screw_tab_holes_a[4],
@@ -912,11 +924,12 @@ module lasercutoutVinylBox(thickness, x=0, y=0, z=0, sides=6, num_fingers=2, ove
                 milling_bit = milling_bit
                 );    
     }
-
     if (sides>5)
-    {    
-    translate([x-overlap+thickness,0,0]) rotate([0,270,0]) lasercutout(thickness=thickness,
-            points=points_end,
+    {
+        // Side 6
+       translate([x-overlap,0,0]) rotate([0,270,0])  lasercutout(thickness=thickness,
+                points=points_5_6,
+                cutouts_vb=cutouts_5_6,
                 simple_tab_holes=simple_tab_holes_a[5], captive_nuts=captive_nuts_a[5],
                 captive_nut_holes = captive_nut_holes_a[5],
                 screw_tab_holes = screw_tab_holes_a[5],
@@ -926,7 +939,7 @@ module lasercutoutVinylBox(thickness, x=0, y=0, z=0, sides=6, num_fingers=2, ove
                 slits = slits_a[5],
                 cutouts = cutouts_a[5],
                 milling_bit = milling_bit
-            );    
-    }
+                );    
+   }
 
 }

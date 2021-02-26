@@ -120,7 +120,7 @@ Easy to make a box with four, five or six side. Uses finger joints with the corr
 ```
 include <lasercut.scad>; 
 
-rotate([0,270,0]) lasercutoutVinylBox(x=80, y=60, z=50, thickness=0.2);
+lasercutoutVinylBox(x=60, y=50, z=80, thickness=0.2);
 ```
 ![alt tag](https://raw.githubusercontent.com/bmsleight/lasercut/master/readme/example-014.png)
 
