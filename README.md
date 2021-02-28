@@ -124,6 +124,7 @@ lasercutoutVinylBox(x=60, y=50, z=80, thickness=0.2);
 ```
 ![alt tag](https://raw.githubusercontent.com/bmsleight/lasercut/master/readme/example-014.png)
 
+[More detail on Vinyl Boxes, including infil ](https://github.com/bmsleight/lasercut/tree/master/readme/VINYLMORE.md)
 
 ##  Finger Joints
 
