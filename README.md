@@ -385,7 +385,7 @@ This is a openscad file showing all the shapes along the y-axis.
 ![alt tag](https://raw.githubusercontent.com/bmsleight/lasercut/master/readme/example-complex-2d-part.png)
 
 
-To adjust the positions of the cut-out, so that are not all along the y-axis the parameter flat_adjust can be used, either in the main files or tweaked in the 2d_ file. For example flat_adjust = [110, -350]), would put the next peice at 110 in x direction and -250 in y-direction. With just using flat_adjust four times, we get a more practical example. 
+To adjust the positions of the cut-out, so that are not all along the y-axis the parameter flat_adjust can be used, either in the main files or tweaked in the 2d_ file. For example flat_adjust = [110, -350]), would put the next peice at 110 in x direction and -250 in y-direction. With just using flat_adjust six times, we get a more practical example. 
 
 See [2d_examples_tweak.scad](https://github.com/bmsleight/lasercut/blob/master/2d_examples_tweak.scad)
 
