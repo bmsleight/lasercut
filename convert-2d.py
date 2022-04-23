@@ -16,6 +16,7 @@ import os
 import argparse
 import subprocess
 import textwrap
+import shlex
 
 extensions_3d = ['.stl', '.off', '.amf', '.3mf']
 extensions_2d = ['.dxf', '.svg', '.pdf']
@@ -56,7 +57,7 @@ def get_openscad_path() -> str:
 
         python_platform = platform.platform()
 
-        if "Darwin" in python_platform:
+        if "Darwin" in python_platform or "macOS" in python_platform:
             # OSX
             out_path = "/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD"
 
@@ -108,10 +109,8 @@ def process_scad_file(in_scad_path: str, out_scad_path: str, library_path: str, 
                             temp_file_base_name)
 
     print(f'Processing "{os.path.basename(in_scad_path)}"')
-    cmd_output = subprocess.run(
-        f'"{openscad_path}" "{in_scad_path}" -D generate=1 -o "{temp_csg}"',
-        capture_output=True,
-    )
+    args = shlex.split(f'"{openscad_path}" "{in_scad_path}" -D generate=1 -o "{temp_csg}"')
+    cmd_output = subprocess.run(args, capture_output=True)
 
     # The CSG file was only used to get the output, delete it immediately
     os.remove(temp_csg)
@@ -273,10 +272,9 @@ if generate_non_scad_file:
 
     print(f"Rendering and exporting as {output_extension}")
 
-    output = subprocess.run(
-        f'"{openscad_path}" "{processed_scad_path}" -o "{output_abs_path}"',
-        capture_output=True,
-    )
+    args = shlex.split(f'"{openscad_path}" "{processed_scad_path}" -o "{output_abs_path}"')
+    
+    output = subprocess.run(args, capture_output=True)
 
     if output.returncode != 0:
         exit_with_error(f"Failed to convert to {output_extension}:\n{output.stderr}")
