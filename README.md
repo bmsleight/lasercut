@@ -369,28 +369,65 @@ The box is made of 4,5 or 6 sides. Each of the sides can have any of slips, tab 
 
 ## Automatically Generate Files Ready for Laser-Cutter
 
-These models are all very nice, but we need have a nice file, normally dxf to use in a laser-cutter. So we can do this automatically.
+These models are all very nice, but we need to have a file compatible with our laser-cutter software, such as a dxf or svg file. This can be automated using the included `convert-2d.py` script, as shown below.
 ```
-/bin/bash ./convert-2d.sh examples.scad 
+python ./convert-2d.py --keep examples.scad examples_flattened.dxf
 ```
-This generates three files; 
-* examples.scad.csg  
-* [2d_examples.scad](https://raw.githubusercontent.com/bmsleight/lasercut/master/2d_examples.scad)  
-* 2d_examples.scad.dxf
+This generates two new files:
+* [examples_flattened.scad](https://raw.githubusercontent.com/bmsleight/lasercut/master/examples_flattened.scad)
+* examples_flattened.dxf
 
-### [2d_examples.scad](https://raw.githubusercontent.com/bmsleight/lasercut/master/2d_examples.scad) 
-This is a openscad file showing all the shapes along the y-axis.
+If only the dxf file is desired, the `--keep` option can be omitted and the generated .scad will not be kept. 
+
+### [examples_flattened.scad](https://raw.githubusercontent.com/bmsleight/lasercut/master/examples_flattened.scad) 
+This is an openscad file showing all the shapes along the y-axis.
 
 ![alt tag](https://raw.githubusercontent.com/bmsleight/lasercut/master/readme/example-complex-2d-all.png)
 ![alt tag](https://raw.githubusercontent.com/bmsleight/lasercut/master/readme/example-complex-2d-part.png)
 
 
-To adjust the positions of the cut-out, so that are not all along the y-axis the parameter flat_adjust can be used, either in the main files or tweaked in the 2d_ file. For example flat_adjust = [110, -350]), would put the next peice at 110 in x direction and -250 in y-direction. With just using flat_adjust six times, we get a more practical example. 
+To adjust the positions of the cut-out, so that are not all along the y-axis the parameter flat_adjust can be used, either in the main files or tweaked in the flattened file. For example flat_adjust = [110, -350]), would put the next peice at 110 in x direction and -250 in y-direction. With just using flat_adjust six times, we get a more practical example. 
 
-See [2d_examples_tweak.scad](https://github.com/bmsleight/lasercut/blob/master/2d_examples_tweak.scad)
+See [examples_flattened_tweak.scad](https://github.com/bmsleight/lasercut/blob/master/examples_flattened_tweak.scad)
 
 Which give an arrangement and can be exported to a new dxf file.
 ![alt tag](https://raw.githubusercontent.com/bmsleight/lasercut/master/readme/example-complex-2d-part-tweak-dxf.png)
+
+### Additional Functionality of convert-2d.py
+Specify the output file
+```commandline
+python ./convert-2d.py examples.scad desired_output_path.scad
+```
+
+Export to a specific format supported by OpenSCAD, e.g., .dxf, .svg, .pdf. The intermediate, flattened scad file will be deleted.
+```commandline
+python ./convert-2d.py examples.scad desired_output_path.svg
+```
+
+Export to a specific format supported by OpenSCAD, while keeping the intermediate, flattened scad file. 
+```commandline
+python ./convert-2d.py --keep examples.scad desired_output_path.svg
+```
+
+Generate a flattened scad file where the pieces have a given thickness, e.g. 3.0mm, This is useful for 3D prints.
+```commandline
+python ./convert-2d.py --extrude=3 examples.scad desired_output_path.scad
+```
+
+Generate a flattened scad file where the pieces have a given thickness in a supported 3D format (.stl, .off, .amf, .3mf)
+```commandline
+python ./convert-2d.py --extrude=2.5 examples.scad desired_output_path.stl
+```
+
+Specify the path to the OpenSCAD executable
+```commandline
+python ./convert-2d.py --openscadbin "C:\Program Files\OpenSCAD\openscad.exe" examples.scad
+```
+
+Specify the path to the lasercut.scad library
+```commandline
+python ./convert-2d.py --library lasercut.scad examples.scad desired_output_path.scad
+```
 
 ## No Laser-Cutter, use Vinyl Cutter
 
