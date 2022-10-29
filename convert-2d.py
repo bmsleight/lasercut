@@ -111,6 +111,7 @@ def process_scad_file(in_scad_path: str, out_scad_path: str, library_path: str, 
     cmd_output = subprocess.run(
         f'"{openscad_path}" "{in_scad_path}" -D generate=1 -o "{temp_csg}"',
         capture_output=True,
+        shell=True
     )
 
     # The CSG file was only used to get the output, delete it immediately
@@ -179,7 +180,7 @@ parser.add_argument('--keep', '-k',
                     help='Keep the intermediate scad file if output type is not already scad')
 
 parser.add_argument('--library', '-l',
-                    default='lasercut/lasercut.scad',
+                    default='lasercut.scad',
                     help='Path to the lasercut.scad library. Value is place in the include <XXX> string.')
 
 parser.add_argument('--openscadbin', '-b',
@@ -254,7 +255,8 @@ else:
 
 
 processed_scad_path = os.path.normcase(processed_scad_path)
-output_abs_path = os.path.normcase(output_abs_path)
+if (output_abs_path):
+    output_abs_path = os.path.normcase(output_abs_path)
 
 # Keep the intermediate file if it already exists or the user wanted it kept
 keep_intermediate_file = args.keep or os.path.isfile(processed_scad_path)

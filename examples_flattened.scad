@@ -1,4 +1,4 @@
-use <lasercut/lasercut.scad>;
+use <lasercut.scad>;
 $fn=60;
 module flat(){
 projection(cut = false)
@@ -6,7 +6,7 @@ projection(cut = false)
 // screw thread major dia must be < 3.1
 // screw thread length must be < 15.5
 // nut thickness must be < 3.1
-// nut flats must be < 9.3
+// nut flats must be < 7
 lasercutout(thickness = 3.1, 
           points = [[0, 0], [100, 0], [100, 75], [0, 75], [0, 0]]
         , simple_tab_holes = [[360, 23.45, 37.5], [360, 73.45, 37.5]]
