@@ -122,7 +122,7 @@ module lasercutout(thickness,  points= [],
         }
         if(captive_nuts != undef) for (t = [0:1:len(captive_nuts)-1]) 
         {
-            if (len(captive_nuts) < 4) {
+            if (len(captive_nuts[t]) < 4) {
                 captiveNutBoltHole(captive_nuts[t][0], captive_nuts[t][1], captive_nuts[t][2], thickness*3, thickness);
             } else {
                 captiveNutBoltHole(captive_nuts[t][0], captive_nuts[t][1], captive_nuts[t][2], captive_nuts[t][3], thickness);
