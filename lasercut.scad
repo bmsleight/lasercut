@@ -372,7 +372,6 @@ module fingers(angle, start_up, fingers, thickness, range_min, range_max, t_x, t
 				for ( p = [ 0 : 1 : fingers] )
 				{
 					i=range_min + ((range_max-range_min)/(fingers*2+1))*2*p;
-					echo ("i: ",i);
 					kerfSize = ((p == 0) || (p == fingers)) ? kerf/2 : kerf;
 					kerfMove = (p == 0) ? 0 : kerf/2;
 					translate([i-kerfMove,0,0]) 
