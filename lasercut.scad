@@ -369,25 +369,25 @@ module fingers(angle, start_up, fingers, thickness, range_min, range_max, t_x, t
     {
         for ( p = [ 0 : 1 : fingers-1] )
 		{
-		
-			kerfSize = (p > 0) ? kerf/2 : kerf/2 ;
-			kerfMove = (p > 0) ? kerf/4 : 0;
 			
 			i=range_min + ((range_max-range_min)/fingers)*p;
             if(start_up == 1) 
             {
-			
+				kerfSize = (p == 0) ? kerf/2 : kerf;
+				kerfMove = (p == 0) ? 0 : kerf/2;
                 translate([i-kerfMove,0,0]) 
                 {
                     cube([ (range_max-range_min)/(fingers*2) + kerfSize, thickness*2, thickness]);
                     if(bumps == true)
                     {
-                        translate([(range_max-range_min)/(fingers*2), thickness*1.5, 0]) cylinder(h=thickness, r=thickness/10);
+                        translate([(range_max-range_min)/(fingers*2)+ kerfSize, thickness*1.5, 0]) cylinder(h=thickness, r=thickness/10);
                     }
                 }
             }
             else 
             {
+				kerfSize = (p==fingers-1) ? kerf/2 : kerf;
+				kerfMove = kerf/2;
                 translate([i+(range_max-range_min)/(fingers*2)-kerfMove,0,0]) 
                 {
                     cube([ (range_max-range_min)/(fingers*2)+kerfSize, thickness*2, thickness]);
@@ -395,7 +395,7 @@ module fingers(angle, start_up, fingers, thickness, range_min, range_max, t_x, t
                     {
                         if (i < (range_max - (range_max-range_min)/fingers ))
                         {
-                            translate([(range_max-range_min)/(fingers*2), thickness*1.5, 0]) cylinder(h=thickness, r=thickness/10);
+                            translate([(range_max-range_min)/(fingers*2)+ kerfSize, thickness*1.5, 0]) cylinder(h=thickness, r=thickness/10);
                         }
                     }
                 }
