@@ -367,40 +367,47 @@ module fingers(angle, start_up, fingers, thickness, range_min, range_max, t_x, t
     // All fun
     translate([t_x, t_y,0]) rotate([0,0,angle]) translate([0, -thickness,0])
     {
-        for ( p = [ 0 : 1 : fingers-1] )
-		{
-			
-			i=range_min + ((range_max-range_min)/fingers)*p;
             if(start_up == 1) 
             {
-				kerfSize = (p == 0) ? kerf/2 : kerf;
-				kerfMove = (p == 0) ? 0 : kerf/2;
-                translate([i-kerfMove,0,0]) 
-                {
-                    cube([ (range_max-range_min)/(fingers*2) + kerfSize, thickness*2, thickness]);
-                    if(bumps == true)
-                    {
-                        translate([(range_max-range_min)/(fingers*2)+ kerfSize, thickness*1.5, 0]) cylinder(h=thickness, r=thickness/10);
-                    }
-                }
+				for ( p = [ 0 : 1 : fingers] )
+				{
+					i=range_min + ((range_max-range_min)/(fingers*2+1))*2*p;
+					echo ("i: ",i);
+					kerfSize = ((p == 0) || (p == fingers)) ? kerf/2 : kerf;
+					kerfMove = (p == 0) ? 0 : kerf/2;
+					translate([i-kerfMove,0,0]) 
+					{
+						cube([ (range_max-range_min)/(fingers*2+1) + kerfSize, thickness*2, thickness]);
+						if(bumps == true)
+						{
+							if (i < (range_max - (range_max-range_min)/fingers ))
+							{
+								translate([(range_max-range_min)/(fingers*2+1)+ kerfSize, thickness*1.5, 0]) cylinder(h=thickness, r=thickness/10);
+							}
+						}
+					}
+				}
             }
             else 
             {
-				kerfSize = (p==fingers-1) ? kerf/2 : kerf;
-				kerfMove = kerf/2;
-                translate([i+(range_max-range_min)/(fingers*2)-kerfMove,0,0]) 
-                {
-                    cube([ (range_max-range_min)/(fingers*2)+kerfSize, thickness*2, thickness]);
-                    if(bumps == true)
-                    {
-                        if (i < (range_max - (range_max-range_min)/fingers ))
-                        {
-                            translate([(range_max-range_min)/(fingers*2)+ kerfSize, thickness*1.5, 0]) cylinder(h=thickness, r=thickness/10);
-                        }
-                    }
-                }
+				for ( p = [ 0 : 1 : fingers-1] )
+				{
+					i=range_min + ((range_max-range_min)/(fingers*2+1)*2)*p;
+					kerfSize = kerf;
+					kerfMove = kerf/2;
+					translate([i+(range_max-range_min)/(fingers*2+1)-kerfMove,0,0]) 
+					{
+						cube([ (range_max-range_min)/(fingers*2+1)+kerfSize, thickness*2, thickness]);
+						if(bumps == true)
+						{
+							if (i < (range_max - (range_max-range_min)/fingers ))
+							{
+								translate([(range_max-range_min)/(fingers*2+1)+ kerfSize, thickness*1.5, 0]) cylinder(h=thickness, r=thickness/10);
+							}
+						}
+					}
+				}
             }
-        }
     }
 
 }
@@ -605,9 +612,9 @@ module lasercutoutBox(thickness, x=0, y=0, z=0, sides=6, num_fingers=2,
     {
         fj = [
             [ [UP, 1, num_fingers], [DOWN, 1, num_fingers],    ],
-            [ [UP, 0, num_fingers], [DOWN, 1, num_fingers],    ],
-            [ [UP, 1, num_fingers], [DOWN, 0, num_fingers],    ],
             [ [UP, 1, num_fingers], [DOWN, 1, num_fingers],    ],
+            [ [UP, 0, num_fingers], [DOWN, 0, num_fingers],    ],
+            [ [UP, 0, num_fingers], [DOWN, 0, num_fingers],    ],
         ];
         translate([0,thickness,0]) lasercutoutBoxAdjustedFJ(thickness = thickness, x=x, y=y-thickness*2 , z=z-thickness*2, sides=sides, fj=fj,
             simple_tab_holes_a=simple_tab_holes_a, 
@@ -630,11 +637,11 @@ module lasercutoutBox(thickness, x=0, y=0, z=0, sides=6, num_fingers=2,
         [[UP, -thickness/2, z-thickness*2], ],
         ];
         fj = [
-            [ [UP, 1, num_fingers], [DOWN, 1, num_fingers], [LEFT, 1, num_fingers],   ],
-            [ [UP, 0, num_fingers], [DOWN, 1, num_fingers], [LEFT, 1, num_fingers],   ],
-            [ [UP, 1, num_fingers], [DOWN, 0, num_fingers], [LEFT, 1, num_fingers],   ],
-            [ [UP, 1, num_fingers], [DOWN, 1, num_fingers], [LEFT, 1, num_fingers],   ],
-            [ [UP, 0, num_fingers], [DOWN, 1, num_fingers], [LEFT, 0, num_fingers], [RIGHT, 1, num_fingers]  ],
+            [ [UP, 1, num_fingers], [DOWN, 1, num_fingers], [LEFT, 0, num_fingers],   ],
+            [ [UP, 1, num_fingers], [DOWN, 1, num_fingers], [LEFT, 0, num_fingers],   ],
+            [ [UP, 0, num_fingers], [DOWN, 0, num_fingers], [LEFT, 0, num_fingers],   ],
+            [ [UP, 0, num_fingers], [DOWN, 0, num_fingers], [LEFT, 0, num_fingers],   ],
+            [ [UP, 1, num_fingers], [DOWN, 1, num_fingers], [LEFT, 1, num_fingers], [RIGHT, 1, num_fingers]  ],
         ];
         
         translate([thickness,thickness,0]) lasercutoutBoxAdjustedFJ(thickness = thickness, x=x-thickness, y=y-thickness*2 , z=z-thickness*2, sides=sides, fj=fj, st=st,
@@ -660,12 +667,12 @@ module lasercutoutBox(thickness, x=0, y=0, z=0, sides=6, num_fingers=2,
         [[UP, z-thickness*1.5, y-thickness*2], ],
         ];
         fj = [
-            [ [UP, 1, num_fingers], [DOWN, 1, num_fingers], [LEFT, 1, num_fingers], [RIGHT, 0, num_fingers]  ],
-            [ [UP, 0, num_fingers], [DOWN, 1, num_fingers], [LEFT, 1, num_fingers], [RIGHT, 0, num_fingers]  ],
-            [ [UP, 1, num_fingers], [DOWN, 0, num_fingers], [LEFT, 1, num_fingers], [RIGHT, 0, num_fingers]  ],
-            [ [UP, 1, num_fingers], [DOWN, 1, num_fingers], [LEFT, 1, num_fingers], [RIGHT, 0, num_fingers]  ],
-            [ [UP, 0, num_fingers], [DOWN, 1, num_fingers], [LEFT, 0, num_fingers], [RIGHT, 1, num_fingers]  ],
-            [ [UP, 0, num_fingers], [DOWN, 1, num_fingers], [LEFT, 0, num_fingers], [RIGHT, 1, num_fingers]  ],
+            [ [UP, 1, num_fingers], [DOWN, 1, num_fingers], [LEFT, 0, num_fingers], [RIGHT, 0, num_fingers]  ],
+            [ [UP, 1, num_fingers], [DOWN, 1, num_fingers], [LEFT, 0, num_fingers], [RIGHT, 0, num_fingers]  ],
+            [ [UP, 0, num_fingers], [DOWN, 0, num_fingers], [LEFT, 0, num_fingers], [RIGHT, 0, num_fingers]  ],
+            [ [UP, 0, num_fingers], [DOWN, 0, num_fingers], [LEFT, 0, num_fingers], [RIGHT, 0, num_fingers]  ],
+            [ [UP, 1, num_fingers], [DOWN, 1, num_fingers], [LEFT, 1, num_fingers], [RIGHT, 1, num_fingers]  ],
+            [ [UP, 1, num_fingers], [DOWN, 1, num_fingers], [LEFT, 1, num_fingers], [RIGHT, 1, num_fingers]  ],
         ];
         translate([thickness,thickness,0]) lasercutoutBoxAdjustedFJ(thickness = thickness, x=x-thickness*2, y=y-thickness*2 , z=z-thickness*2, sides=sides, fj=fj, st=st,
             simple_tab_holes_a=simple_tab_holes_a, 
