@@ -342,6 +342,9 @@ lasercutoutSquare(thickness=thickness, x=x, y=y,
             [r, x/2, y/2],
             [1.5, x/2, y*2/3], // Screw-hole
         ],
+    squares_add = [
+            [20, 20, x, y-20]
+        ],
     slits = [
             [RIGHT,x,y/2,10]
         ],
@@ -351,7 +354,7 @@ lasercutoutSquare(thickness=thickness, x=x, y=y,
     );
     
 ```
-![alt tag](https://raw.githubusercontent.com/bmsleight/lasercut/master/readme/example-007.png)
+![alt tag](readme/example-007.png)
     
 
 ## Complex Example

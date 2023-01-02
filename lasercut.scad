@@ -25,6 +25,7 @@ module lasercutoutSquare(thickness, x=0, y=0,
         clips=[], clip_holes=[],
         circles_add = [],
         circles_remove = [],
+        squares_add = [],
         slits = [],
         cutouts = [],
         cutouts_vb = [],
@@ -46,6 +47,7 @@ lasercutout(thickness=thickness,
         clips=clips, clip_holes=clip_holes,
         circles_add = circles_add,
         circles_remove = circles_remove,
+        squares_add = squares_add,
         slits = slits,
         cutouts = cutouts,
         cutouts_vb = cutouts_vb,
@@ -64,6 +66,7 @@ module lasercutout(thickness,  points= [],
         clips=[], clip_holes=[],
         circles_add = [],
         circles_remove = [],
+        squares_add = [],
         slits = [],
         cutouts = [],
         cutouts_vb = [],
@@ -97,6 +100,10 @@ module lasercutout(thickness,  points= [],
             if(circles_add != undef) for (t = [0:1:len(circles_add)-1]) 
             {
                 circlesAdd(circles_add[t][0], circles_add[t][1], circles_add[t][2], thickness);
+            }    
+            if(squares_add != undef) for (t = [0:1:len(squares_add)-1]) 
+            {
+                squaresAdd(squares_add[t][0], squares_add[t][1], squares_add[t][2], squares_add[t][3], thickness);
             }    
             if(finger_joints != undef) for (t = [0:1:len(finger_joints)-1]) 
             {
@@ -244,6 +251,8 @@ module lasercutout(thickness,  points= [],
             echo(str("[LC]         , clip_holes = ", clip_holes));
         if(circles_add)
             echo(str("[LC]         , circles_add = ", circles_add));
+        if(squares_add)
+            echo(str("[LC]         , squares_add = ", squares_add));
         if(circles_remove)
             echo(str("[LC]         , circles_remove = ", circles_remove));
         if(slits)
@@ -571,6 +580,12 @@ module circlesAdd(radius, x, y, thickness)
     translate([x,y,0]) cylinder(h=thickness, r=radius);
 }
 
+module squaresAdd(xLength, yLength, x, y, thickness)
+{
+    translate([x,y,thickness/2]) cube([xLength,yLength,thickness], center=true);
+}
+
+
 module circlesRemove(radius, x, y, thickness)
 {
     translate([x,y,-thickness]) cylinder(h=thickness*3, r=radius);
@@ -595,6 +610,7 @@ module lasercutoutBox(thickness, x=0, y=0, z=0, sides=6, num_fingers=2,
         clip_holes_a=[],
         circles_add_a=[],
         circles_remove_a=[],
+        squares_add_a=[],
         slits_a = [],
         cutouts_a = [],
         milling_bit = 0.0
@@ -617,6 +633,7 @@ module lasercutoutBox(thickness, x=0, y=0, z=0, sides=6, num_fingers=2,
             clip_holes_a=clip_holes_a,
             circles_add_a=circles_add_a,
             circles_remove_a=circles_remove_a,
+            squares_add_a=squares_add_a,
             slits_a=slits_a,
             cutouts_a=cutouts_a,
             milling_bit = milling_bit
@@ -645,6 +662,7 @@ module lasercutoutBox(thickness, x=0, y=0, z=0, sides=6, num_fingers=2,
             clip_holes_a=clip_holes_a,
             circles_add_a=circles_add_a,
             circles_remove_a=circles_remove_a,
+            squares_add_a=squares_add_a,
             slits_a=slits_a,
             cutouts_a=cutouts_a,
             milling_bit = milling_bit
@@ -675,6 +693,7 @@ module lasercutoutBox(thickness, x=0, y=0, z=0, sides=6, num_fingers=2,
             clip_holes_a=clip_holes_a,
             circles_add_a=circles_add_a,
             circles_remove_a=circles_remove_a,
+            squares_add_a=squares_add_a,
             slits_a=slits_a,
             cutouts_a=cutouts_a,
             milling_bit = milling_bit
@@ -692,6 +711,7 @@ module lasercutoutBoxAdjustedFJ(thickness, x=0, y=0, z=0, sides=6, fj=[], st=[],
         clip_holes_a = [],
         circles_add_a = [],
         circles_remove_a = [],
+        squares_add_a = [],
         slits_a = [],
         cutouts_a = [],
         milling_bit = 0.0
@@ -705,6 +725,7 @@ module lasercutoutBoxAdjustedFJ(thickness, x=0, y=0, z=0, sides=6, fj=[], st=[],
                                 twist_holes = twist_holes_a[0],
                                 clip_holes = clip_holes_a[0],
                                 circles_add = circles_add_a[0], circles_remove = circles_remove_a[0],
+                                squares_add = squares_add_a[0],
                                 slits = slits_a[0],
                                 cutouts = cutouts_a[0],
                                 milling_bit = milling_bit);
@@ -716,6 +737,7 @@ module lasercutoutBoxAdjustedFJ(thickness, x=0, y=0, z=0, sides=6, fj=[], st=[],
                                 twist_holes = twist_holes_a[1],
                                 clip_holes = clip_holes_a[1],
                                 circles_add = circles_add_a[1], circles_remove = circles_remove_a[1],
+                                squares_add = squares_add_a[1],
                                 slits = slits_a[1],
                                 cutouts = cutouts_a[1],
                                 milling_bit = milling_bit);
@@ -727,6 +749,7 @@ module lasercutoutBoxAdjustedFJ(thickness, x=0, y=0, z=0, sides=6, fj=[], st=[],
                                 twist_holes = twist_holes_a[2],
                                 clip_holes = clip_holes_a[2],
                                 circles_add = circles_add_a[2], circles_remove = circles_remove_a[2],
+                                squares_add = squares_add_a[2],
                                 slits = slits_a[2],
                                 cutouts = cutouts_a[2],
                                 milling_bit = milling_bit);
@@ -739,6 +762,7 @@ module lasercutoutBoxAdjustedFJ(thickness, x=0, y=0, z=0, sides=6, fj=[], st=[],
                                 twist_holes = twist_holes_a[3],
                                 clip_holes = clip_holes_a[3],
                                 circles_add = circles_add_a[3], circles_remove = circles_remove_a[3],
+                                squares_add = squares_add_a[3],
                                 slits = slits_a[3],
                                 cutouts = cutouts_a[3],
                                 milling_bit = milling_bit
@@ -753,6 +777,7 @@ module lasercutoutBoxAdjustedFJ(thickness, x=0, y=0, z=0, sides=6, fj=[], st=[],
                                 twist_holes = twist_holes_a[4],
                                 clip_holes = clip_holes_a[4],
                                 circles_add = circles_add_a[4], circles_remove = circles_remove_a[4],
+                                squares_add = squares_add_a[4],
                                 slits = slits_a[4],
                                 cutouts = cutouts_a[4],
                                 milling_bit = milling_bit);
@@ -768,6 +793,7 @@ module lasercutoutBoxAdjustedFJ(thickness, x=0, y=0, z=0, sides=6, fj=[], st=[],
                                 twist_holes = twist_holes_a[5],
                                 clip_holes = clip_holes_a[5],
                                 circles_add = circles_add_a[5], circles_remove = circles_remove_a[5],
+                                squares_add = squares_add_a[5],
                                 slits = slits_a[5],
                                 cutouts = cutouts_a[5],
                                 milling_bit = milling_bit);
@@ -785,6 +811,7 @@ module lasercutoutVinylBox(thickness, x=0, y=0, z=0, sides=6, overlapdistance=-1
         clip_holes_a=[],
         circles_add_a=[],
         circles_remove_a=[],
+        squares_add_a=[],
         slits_a = [],
         cutouts_a = [],
         milling_bit = 0.0
@@ -912,6 +939,7 @@ module lasercutoutVinylBox(thickness, x=0, y=0, z=0, sides=6, overlapdistance=-1
                 twist_holes = twist_holes_a[0],
                 clip_holes = clip_holes_a[0],
                 circles_add = circles_add_a[0], circles_remove = circles_remove_a[0],
+                squares_add = squares_add_a[0],
                 slits = slits_a[0],
                 cutouts = cutouts_a[0],
                 milling_bit = milling_bit
@@ -929,6 +957,7 @@ module lasercutoutVinylBox(thickness, x=0, y=0, z=0, sides=6, overlapdistance=-1
                 twist_holes = twist_holes_a[1],
                 clip_holes = clip_holes_a[1],
                 circles_add = circles_add_a[1], circles_remove = circles_remove_a[1],
+                squares_add = squares_add_a[1],
                 slits = slits_a[1],
                 cutouts = cutouts_a[1],
                 milling_bit = milling_bit
@@ -946,6 +975,7 @@ module lasercutoutVinylBox(thickness, x=0, y=0, z=0, sides=6, overlapdistance=-1
                 twist_holes = twist_holes_a[2],
                 clip_holes = clip_holes_a[2],
                 circles_add = circles_add_a[2], circles_remove = circles_remove_a[2],
+                squares_add = squares_add_a[2],
                 slits = slits_a[2],
                 cutouts = cutouts_a[2],
                 milling_bit = milling_bit
@@ -963,6 +993,7 @@ module lasercutoutVinylBox(thickness, x=0, y=0, z=0, sides=6, overlapdistance=-1
                 twist_holes = twist_holes_a[3],
                 clip_holes = clip_holes_a[3],
                 circles_add = circles_add_a[3], circles_remove = circles_remove_a[3],
+                squares_add = squares_add_a[3],
                 slits = slits_a[3],
                 cutouts = cutouts_a[3],
                 milling_bit = milling_bit
@@ -980,6 +1011,7 @@ module lasercutoutVinylBox(thickness, x=0, y=0, z=0, sides=6, overlapdistance=-1
                 twist_holes = twist_holes_a[4],
                 clip_holes = clip_holes_a[4],
                 circles_add = circles_add_a[4], circles_remove = circles_remove_a[4],
+                squares_add = squares_add_a[4],
                 slits = slits_a[4],
                 cutouts = cutouts_a[4],
                 milling_bit = milling_bit
@@ -997,6 +1029,7 @@ module lasercutoutVinylBox(thickness, x=0, y=0, z=0, sides=6, overlapdistance=-1
                 twist_holes = twist_holes_a[5],
                 clip_holes = clip_holes_a[5],
                 circles_add = circles_add_a[5], circles_remove = circles_remove_a[5],
+                squares_add = squares_add_a[5],
                 slits = slits_a[5],
                 cutouts = cutouts_a[5],
                 milling_bit = milling_bit
