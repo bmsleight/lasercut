@@ -388,9 +388,9 @@ module fingers(angle, start_up, fingers, thickness, range_min, range_max, t_x, t
             {
 				kerfSize = (p==fingers-1) ? kerf/2 : kerf;
 				kerfMove = kerf/2;
-                translate([i+(range_max-range_min)/(fingers*2)-kerfMove,0,0]) 
+                translate([i+(range_max-range_min)/(fingers*2)-kerfMove,thickness,0]) 
                 {
-                    cube([ (range_max-range_min)/(fingers*2)+kerfSize, thickness*2, thickness]);
+                    cube([ (range_max-range_min)/(fingers*2)+kerfSize, thickness, thickness]);
                     if(bumps == true)
                     {
                         if (i < (range_max - (range_max-range_min)/fingers ))
